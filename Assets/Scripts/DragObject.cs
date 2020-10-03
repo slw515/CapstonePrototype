@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class DragObject : MonoBehaviour
 {
@@ -47,7 +48,7 @@ public class DragObject : MonoBehaviour
         }
         else if (editingMode == 3)
         {
-          float scrollY = Input.mouseScrollDelta.y;
+          float scrollY = (Input.mouseScrollDelta.y / 5) * -1;
 
           objectHit.transform.localScale += new Vector3(scrollY, scrollY, scrollY);
         }
@@ -63,7 +64,6 @@ public class DragObject : MonoBehaviour
       holdTime = 0;
     }
     float scrollX = Input.mouseScrollDelta.y;
-    Debug.Log(scrollX);
   }
   void OnMouseDown()
   {
@@ -84,5 +84,15 @@ public class DragObject : MonoBehaviour
     Vector3 mousePoint = Input.mousePosition;
     mousePoint.z = mZCoord;
     return Camera.main.ScreenToWorldPoint(mousePoint);
+  }
+
+
+  private bool IsPointerOverUIObject()
+  {
+    PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+    eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+    List<RaycastResult> results = new List<RaycastResult>();
+    EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+    return results.Count > 0;
   }
 }

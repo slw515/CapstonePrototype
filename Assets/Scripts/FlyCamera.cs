@@ -26,12 +26,17 @@ public class FlyCamera : MonoBehaviour
   {
     editingMode = GameObject.Find("Main Camera").GetComponent<RaycastManager>().editingMode;
 
+    // if (Input.GetKey(KeyCode.Z) || (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)))
+    if (Input.GetKey(KeyCode.LeftAlt))
+    {
+      lastMouse = Input.mousePosition - lastMouse;
+      lastMouse = new Vector3(-lastMouse.y * camSens, lastMouse.x * camSens, 0);
+      lastMouse = new Vector3(transform.eulerAngles.x + lastMouse.x, transform.eulerAngles.y + lastMouse.y, 0);
+      transform.eulerAngles = lastMouse;
+      lastMouse = Input.mousePosition;
+    }
 
-    lastMouse = Input.mousePosition - lastMouse;
-    lastMouse = new Vector3(-lastMouse.y * camSens, lastMouse.x * camSens, 0);
-    lastMouse = new Vector3(transform.eulerAngles.x + lastMouse.x, transform.eulerAngles.y + lastMouse.y, 0);
-    transform.eulerAngles = lastMouse;
-    lastMouse = Input.mousePosition;
+
     //Mouse  camera angle done.  
 
     //Keyboard commands

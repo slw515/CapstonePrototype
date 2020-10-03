@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class RaycastManager : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class RaycastManager : MonoBehaviour
   public GameObject[] opaqueObjects;
   [SerializeField]
   GameObject ForwardArrow;
+
+  public GameObject colorWheelUIElement;
   public GameObject PlacedPrefab
   {
     get
@@ -78,24 +81,40 @@ public class RaycastManager : MonoBehaviour
 
       if (Input.GetMouseButtonDown(0))
       {
-        if (Physics.Raycast(theRay, out hitInfo))
+        if (!IsPointerOverUIObject())
         {
-          objectHit = hitInfo.transform.gameObject;
+          if (Physics.Raycast(theRay, out hitInfo))
+          {
+            Vector3 position = hitInfo.transform.position + hitInfo.normal;
+            Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+            objectHit = hitInfo.transform.gameObject;
+            if (objectHit.name == "Plane")
+            {
+              var instantiatedObject = Instantiate(placedPrefab, hitInfo.point, objectHit.transform.rotation) as GameObject;
+              instantiatedObject.AddComponent<DragObject>();
 
-          var instantiatedObject = Instantiate(placedPrefab, hitInfo.point, objectHit.transform.rotation) as GameObject;
-          instantiatedObject.AddComponent<DragObject>();
+            }
+            else if (objectHit.name == "PlacedShape(Clone)")
+            {
+              var instantiatedObject = Instantiate(placedPrefab, position, rotation) as GameObject;
+              instantiatedObject.AddComponent<DragObject>();
 
+            }
+
+          }
         }
       }
       else
       {
         if (Physics.Raycast(theRay, out hitInfo))
         {
-
-          objectHit = hitInfo.transform.gameObject;
-          if (objectHit.name != "Transparent")
+          if (!IsPointerOverUIObject())
           {
-            previewShape.transform.position = hitInfo.point;
+            objectHit = hitInfo.transform.gameObject;
+            if (objectHit.name != "Transparent")
+            {
+              previewShape.transform.position = hitInfo.point;
+            }
           }
         }
       }
@@ -104,10 +123,12 @@ public class RaycastManager : MonoBehaviour
     {
       if (Input.GetMouseButton(0))
       {
-
-        if (Physics.Raycast(theRay, out hitInfo))
+        if (!IsPointerOverUIObject())
         {
-          objectHit = hitInfo.transform.gameObject;
+          if (Physics.Raycast(theRay, out hitInfo))
+          {
+            objectHit = hitInfo.transform.gameObject;
+          }
         }
       }
     }
@@ -194,5 +215,118 @@ public class RaycastManager : MonoBehaviour
       previewShape.GetComponent<Renderer>().enabled = false;
 
     }
+  }
+
+  public void changeState(int value)
+  {
+    Debug.Log(value);
+
+    if (value == 1)
+    {
+      editingMode = 0;
+
+      placedPrefab = opaqueObjects[0];
+      previewShape = previewObjects[0];
+      foreach (GameObject shape in previewObjects)
+      {
+        shape.transform.position = new Vector3(-2, -2, -2);
+      }
+    }
+    else if (value == 2)
+    //cube
+    {
+      editingMode = 0;
+
+      placedPrefab = opaqueObjects[1];
+      previewShape = previewObjects[1];
+      foreach (GameObject shape in previewObjects)
+      {
+        shape.transform.position = new Vector3(-2, -2, -2);
+      }
+    }
+    else if (value == 3)
+    //cube
+    {
+      editingMode = 0;
+      placedPrefab = opaqueObjects[2];
+      previewShape = previewObjects[2];
+      foreach (GameObject shape in previewObjects)
+      {
+        shape.transform.position = new Vector3(-2, -2, -2);
+      }
+    }
+    else if (value == 4)
+    //cube
+    {
+      editingMode = 0;
+      placedPrefab = opaqueObjects[3];
+      previewShape = previewObjects[3];
+      foreach (GameObject shape in previewObjects)
+      {
+        shape.transform.position = new Vector3(-2, -2, -2);
+      }
+    }
+    // else if (Input.GetKeyDown("e"))
+    // {
+    //   editingMode = 1;
+
+    //   // previewShape.GetComponent<Renderer>().enabled = true;
+    //   // ForwardArrow.SetActive(false);
+    //   previewShape.GetComponent<Renderer>().enabled = false;
+
+    // }
+    // else if (Input.GetKeyDown("c"))
+    // {
+    //   editingMode = 0;
+
+    //   previewShape.GetComponent<Renderer>().enabled = true;
+    //   // ForwardArrow.SetActive(false);
+    //   // previewShape.GetComponent<Renderer>().enabled = false;
+
+    // }
+    else if (value == 5)
+    {
+      editingMode = 3;
+
+      previewShape.GetComponent<Renderer>().enabled = false;
+    }
+    else if (value == 6)
+    {
+      editingMode = 2;
+
+      previewShape.GetComponent<Renderer>().enabled = false;
+      // ForwardArrow.SetActive(false);
+      // previewShape.GetComponent<Renderer>().enabled = false;
+
+    }
+
+    else if (value == 7)
+    {
+      editingMode = 4;
+
+      previewShape.GetComponent<Renderer>().enabled = false;
+
+    }
+    else if (value == 8)
+    {
+      editingMode = 1;
+
+      previewShape.GetComponent<Renderer>().enabled = false;
+
+    }
+  }
+  //When Touching UI
+  private bool IsPointerOverUIObject()
+  {
+    PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+    eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+    List<RaycastResult> results = new List<RaycastResult>();
+    EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+    return results.Count > 0;
+  }
+
+  public void toggleColorWheel()
+  {
+    colorWheelUIElement.SetActive(!colorWheelUIElement.activeSelf);
   }
 }

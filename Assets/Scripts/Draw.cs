@@ -25,7 +25,8 @@ public class Draw : MonoBehaviour
   {
 
     editingMode = GameObject.Find("Main Camera").GetComponent<RaycastManager>().editingMode;
-
+    // Color currentColor = GameObject.Find("ColorPalette").GetComponent<ColorPaletteController>().SelectedColor;
+    // stroke.GetComponent<Renderer>().material.color = new Color(0.4f, 0.5f, 0.9f);
     if (mouseLookTesting)
     {
       yaw += 2 * Input.GetAxis("Mouse X");
@@ -52,13 +53,19 @@ public class Draw : MonoBehaviour
 
   public void StartStroke()
   {
-    GameObject currentStroke;
-    drawing = true;
-    currentStroke = Instantiate(stroke, spacePenPoint.transform.position, spacePenPoint.transform.rotation) as GameObject;
+    if (editingMode == 4)
+    {
+      GameObject currentStroke;
+      drawing = true;
+      currentStroke = Instantiate(stroke, spacePenPoint.transform.position, spacePenPoint.transform.rotation) as GameObject;
+    }
   }
 
   public void EndStroke()
   {
-    drawing = false;
+    if (editingMode == 4)
+    {
+      drawing = false;
+    }
   }
 }
