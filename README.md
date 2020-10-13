@@ -7,3 +7,8 @@ Early prototyping is focused on interaction design, namely the issue of having t
 
 Link to [current prototyping](https://youtu.be/phBd6IN89c0) and [here](https://youtu.be/yL36YWvt6Hk)
 
+**Screenshots**
+![GitHub Logo](/images/logo.png)
+![GitHub Logo](/images/logo.png)
+
+
