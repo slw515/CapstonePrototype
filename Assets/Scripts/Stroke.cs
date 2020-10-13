@@ -14,7 +14,9 @@ public class Stroke : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-    if (Draw.drawing)
+    int editingMode = GameObject.Find("Main Camera").GetComponent<RaycastManager>().editingMode;
+
+    if (Draw.drawing && editingMode == 4)
     {
       this.transform.position = penPoint.transform.position;
       this.transform.rotation = penPoint.transform.rotation;

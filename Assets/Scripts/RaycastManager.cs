@@ -25,6 +25,8 @@ public class RaycastManager : MonoBehaviour
   GameObject ForwardArrow;
 
   public GameObject colorWheelUIElement;
+  private bool snapMode = true;
+  public GameObject emptyObject;
   public GameObject PlacedPrefab
   {
     get
@@ -78,7 +80,6 @@ public class RaycastManager : MonoBehaviour
     RaycastHit hitInfo;
     if (editingMode == 0)
     {
-
       if (Input.GetMouseButtonDown(0))
       {
         if (!IsPointerOverUIObject())
@@ -91,16 +92,26 @@ public class RaycastManager : MonoBehaviour
             if (objectHit.name == "Plane")
             {
               var instantiatedObject = Instantiate(placedPrefab, hitInfo.point, objectHit.transform.rotation) as GameObject;
+              instantiatedObject.transform.parent = emptyObject.transform;
+
               instantiatedObject.AddComponent<DragObject>();
 
             }
             else if (objectHit.name == "PlacedShape(Clone)")
             {
-              var instantiatedObject = Instantiate(placedPrefab, position, rotation) as GameObject;
-              instantiatedObject.AddComponent<DragObject>();
-
+              if (snapMode)
+              {
+                var instantiatedObject = Instantiate(placedPrefab, position, rotation) as GameObject;
+                instantiatedObject.transform.parent = emptyObject.transform;
+                instantiatedObject.AddComponent<DragObject>();
+              }
+              else
+              {
+                var instantiatedObject = Instantiate(placedPrefab, hitInfo.point, rotation) as GameObject;
+                instantiatedObject.transform.parent = emptyObject.transform;
+                instantiatedObject.AddComponent<DragObject>();
+              }
             }
-
           }
         }
       }
@@ -110,10 +121,29 @@ public class RaycastManager : MonoBehaviour
         {
           if (!IsPointerOverUIObject())
           {
+            Vector3 position = hitInfo.transform.position + hitInfo.normal;
+            Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+            Debug.Log(rotation);
             objectHit = hitInfo.transform.gameObject;
             if (objectHit.name != "Transparent")
             {
-              previewShape.transform.position = hitInfo.point;
+              if (snapMode)
+              {
+                if (objectHit.name == "Plane")
+                {
+                  previewShape.transform.position = hitInfo.point;
+                }
+                else
+                {
+                  previewShape.transform.position = hitInfo.transform.position + hitInfo.normal;
+                  previewShape.transform.localRotation = rotation;
+                }
+              }
+              else
+              {
+                previewShape.transform.position = hitInfo.point;
+
+              }
             }
           }
         }
@@ -219,8 +249,6 @@ public class RaycastManager : MonoBehaviour
 
   public void changeState(int value)
   {
-    Debug.Log(value);
-
     if (value == 1)
     {
       editingMode = 0;
@@ -328,5 +356,15 @@ public class RaycastManager : MonoBehaviour
   public void toggleColorWheel()
   {
     colorWheelUIElement.SetActive(!colorWheelUIElement.activeSelf);
+  }
+
+  public void toggleSnap()
+  {
+    snapMode = !snapMode;
+  }
+
+  public void rotateParent()
+  {
+    emptyObject.transform.Rotate(0, 90, 0);
   }
 }

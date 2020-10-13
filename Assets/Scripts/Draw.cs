@@ -13,6 +13,7 @@ public class Draw : MonoBehaviour
   public GameObject spacePenPoint;
   public GameObject stroke;
   public static bool drawing = false;
+  private Color currentColor;
 
   // Start is called before the first frame update
   void Start()
@@ -25,8 +26,11 @@ public class Draw : MonoBehaviour
   {
 
     editingMode = GameObject.Find("Main Camera").GetComponent<RaycastManager>().editingMode;
-    // Color currentColor = GameObject.Find("ColorPalette").GetComponent<ColorPaletteController>().SelectedColor;
     // stroke.GetComponent<Renderer>().material.color = new Color(0.4f, 0.5f, 0.9f);
+    if (GameObject.Find("ColorPalette")?.GetComponent<ColorPaletteController>())
+    {
+      currentColor = GameObject.Find("ColorPalette").GetComponent<ColorPaletteController>().SelectedColor;
+    }
     if (mouseLookTesting)
     {
       yaw += 2 * Input.GetAxis("Mouse X");
@@ -40,7 +44,7 @@ public class Draw : MonoBehaviour
       StartStroke();
       // drawObject.SetActive(true);
     }
-    else if (Input.GetMouseButtonUp(0) == true && editingMode == 4)
+    else if (Input.GetMouseButton(0) == false && editingMode == 4)
     {
       EndStroke();
       // drawObject.SetActive(false);
@@ -58,6 +62,8 @@ public class Draw : MonoBehaviour
       GameObject currentStroke;
       drawing = true;
       currentStroke = Instantiate(stroke, spacePenPoint.transform.position, spacePenPoint.transform.rotation) as GameObject;
+      currentStroke.GetComponent<Renderer>().material.color = currentColor;
+      currentStroke = null;
     }
   }
 

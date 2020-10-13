@@ -180,7 +180,6 @@ public class ColorPaletteController : MonoBehaviour, IBeginDragHandler, IDragHan
       OnHueChange?.Invoke(discretedH);
     if (pickedColorImage) pickedColorImage.color = color;
     SelectedColor = color;
-    Debug.Log(SelectedColor);
     previousDiscretedH = discretedH;
   }
   public void OnDrag(PointerEventData eventData)
