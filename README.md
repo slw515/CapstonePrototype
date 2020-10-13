@@ -9,8 +9,8 @@ Link to [current prototyping](https://youtu.be/phBd6IN89c0) and [here](https://y
 
 **Screenshots**
 
-<img src="/Images/sc1.png" width=450 align=left>
-<img src="/Images/sc2.png" width=450 align=right>
+<img src="/Images/sc1.png" width=480 align=left>
+<img src="/Images/sc2.png" width=480 align=right>
 
 
 
