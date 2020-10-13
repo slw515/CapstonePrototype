@@ -11,4 +11,7 @@ Link to [current prototyping](https://youtu.be/phBd6IN89c0) and [here](https://y
 ![GitHub Logo](/Images/sc1.png)
 ![GitHub Logo](/Images/sc2.png)
 
+<img src="/Images/sc2.png" width=300 align=right>
+
+
 
