@@ -8,9 +8,8 @@ Early prototyping is focused on interaction design, namely the issue of having t
 Link to [current prototyping](https://youtu.be/phBd6IN89c0) and [here](https://youtu.be/yL36YWvt6Hk)
 
 **Screenshots**
-![GitHub Logo](/Images/sc1.png)
-![GitHub Logo](/Images/sc2.png)
 
+<img src="/Images/sc1.png" width=300 align=right>
 <img src="/Images/sc2.png" width=300 align=right>
 
 
