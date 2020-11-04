@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Draw : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class Draw : MonoBehaviour
   int editingMode;
   public GameObject spacePenPoint;
   public GameObject stroke;
+  public GameObject colorPicker;
+
   public static bool drawing = false;
   private Color currentColor;
 
@@ -30,6 +33,8 @@ public class Draw : MonoBehaviour
     if (GameObject.Find("ColorPalette")?.GetComponent<ColorPaletteController>())
     {
       currentColor = GameObject.Find("ColorPalette").GetComponent<ColorPaletteController>().SelectedColor;
+      // colorPicker.GetComponent<Image>().color = ;
+      colorPicker.GetComponent<Image>().color = currentColor;
     }
     if (mouseLookTesting)
     {

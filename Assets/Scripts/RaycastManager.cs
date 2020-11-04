@@ -65,7 +65,6 @@ public class RaycastManager : MonoBehaviour
     {
       shape.transform.position = new Vector3(-2, -500, -2);
       shape.name = "PlacedShape";
-
     }
     placedPrefab.name = "PlacedShape";
     previewShape = previewObjects[2];
@@ -93,7 +92,7 @@ public class RaycastManager : MonoBehaviour
             {
               var instantiatedObject = Instantiate(placedPrefab, hitInfo.point, objectHit.transform.rotation) as GameObject;
               instantiatedObject.transform.parent = emptyObject.transform;
-
+              instantiatedObject.GetComponent<MeshRenderer>().material = placedMaterial;
               instantiatedObject.AddComponent<DragObject>();
 
             }
@@ -102,12 +101,14 @@ public class RaycastManager : MonoBehaviour
               if (snapMode)
               {
                 var instantiatedObject = Instantiate(placedPrefab, position, rotation) as GameObject;
+                instantiatedObject.transform.localScale = objectHit.transform.localScale;
                 instantiatedObject.transform.parent = emptyObject.transform;
                 instantiatedObject.AddComponent<DragObject>();
               }
               else
               {
                 var instantiatedObject = Instantiate(placedPrefab, hitInfo.point, rotation) as GameObject;
+                instantiatedObject.transform.localScale = objectHit.transform.localScale;
                 instantiatedObject.transform.parent = emptyObject.transform;
                 instantiatedObject.AddComponent<DragObject>();
               }
@@ -123,7 +124,7 @@ public class RaycastManager : MonoBehaviour
           {
             Vector3 position = hitInfo.transform.position + hitInfo.normal;
             Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
-            Debug.Log(rotation);
+            // Debug.Log(rotation);
             objectHit = hitInfo.transform.gameObject;
             if (objectHit.name != "Transparent")
             {
@@ -132,17 +133,20 @@ public class RaycastManager : MonoBehaviour
                 if (objectHit.name == "Plane")
                 {
                   previewShape.transform.position = hitInfo.point;
+                  previewShape.transform.localScale = new Vector3(1, 1, 1);
+
                 }
                 else
                 {
                   previewShape.transform.position = hitInfo.transform.position + hitInfo.normal;
                   previewShape.transform.localRotation = rotation;
+                  previewShape.transform.localScale = objectHit.transform.localScale;
+
                 }
               }
               else
               {
                 previewShape.transform.position = hitInfo.point;
-
               }
             }
           }
@@ -205,15 +209,6 @@ public class RaycastManager : MonoBehaviour
         shape.transform.position = new Vector3(-2, -2, -2);
       }
     }
-    else if (Input.GetKeyDown("e"))
-    {
-      editingMode = 1;
-
-      // previewShape.GetComponent<Renderer>().enabled = true;
-      // ForwardArrow.SetActive(false);
-      previewShape.GetComponent<Renderer>().enabled = false;
-
-    }
     else if (Input.GetKeyDown("c"))
     {
       editingMode = 0;
@@ -221,6 +216,15 @@ public class RaycastManager : MonoBehaviour
       previewShape.GetComponent<Renderer>().enabled = true;
       // ForwardArrow.SetActive(false);
       // previewShape.GetComponent<Renderer>().enabled = false;
+
+    }
+    else if (Input.GetKeyDown("e"))
+    {
+      editingMode = 1;
+
+      // previewShape.GetComponent<Renderer>().enabled = true;
+      // ForwardArrow.SetActive(false);
+      previewShape.GetComponent<Renderer>().enabled = false;
 
     }
     else if (Input.GetKeyDown("r"))
@@ -294,24 +298,7 @@ public class RaycastManager : MonoBehaviour
         shape.transform.position = new Vector3(-2, -2, -2);
       }
     }
-    // else if (Input.GetKeyDown("e"))
-    // {
-    //   editingMode = 1;
 
-    //   // previewShape.GetComponent<Renderer>().enabled = true;
-    //   // ForwardArrow.SetActive(false);
-    //   previewShape.GetComponent<Renderer>().enabled = false;
-
-    // }
-    // else if (Input.GetKeyDown("c"))
-    // {
-    //   editingMode = 0;
-
-    //   previewShape.GetComponent<Renderer>().enabled = true;
-    //   // ForwardArrow.SetActive(false);
-    //   // previewShape.GetComponent<Renderer>().enabled = false;
-
-    // }
     else if (value == 5)
     {
       editingMode = 3;
@@ -342,6 +329,12 @@ public class RaycastManager : MonoBehaviour
       previewShape.GetComponent<Renderer>().enabled = false;
 
     }
+    else if (value == 9)
+    {
+      editingMode = 5;
+
+      previewShape.GetComponent<Renderer>().enabled = false;
+    }
   }
   //When Touching UI
   private bool IsPointerOverUIObject()
@@ -365,6 +358,6 @@ public class RaycastManager : MonoBehaviour
 
   public void rotateParent()
   {
-    emptyObject.transform.Rotate(0, 90, 0);
+    emptyObject.transform.Rotate(0, 45, 0);
   }
 }
