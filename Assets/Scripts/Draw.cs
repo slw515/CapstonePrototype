@@ -10,6 +10,7 @@ public class Draw : MonoBehaviour
   private float pitch = 0;
   private float yaw = 0;
   public GameObject drawObject;
+  public GameObject cam;
   int editingMode;
   public GameObject spacePenPoint;
   public GameObject stroke;
@@ -27,8 +28,9 @@ public class Draw : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
+    editingMode = cam.GetComponent<RaycastManager>().editingMode;
+    // Debug.Log(editingMode);
 
-    editingMode = GameObject.Find("Main Camera").GetComponent<RaycastManager>().editingMode;
     // stroke.GetComponent<Renderer>().material.color = new Color(0.4f, 0.5f, 0.9f);
     if (GameObject.Find("ColorPalette")?.GetComponent<ColorPaletteController>())
     {
@@ -43,21 +45,32 @@ public class Draw : MonoBehaviour
 
       transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
     }
-
+#if UNITY_IPHONE && !UNITY_EDITOR
+    //     if (Input.touchCount == 0)
+    //       return;
+    if (Input.touchCount > 0 && editingMode == 4)
+    {
+      StartStroke();
+      // drawObject.SetActive(true);
+    }
+    else if (Input.touchCount == 0 && editingMode == 4)
+    {
+      EndStroke();
+      // drawObject.SetActive(false);
+    }
+#endif
+#if UNITY_EDITOR
     if (Input.GetMouseButton(0) && editingMode == 4)
     {
       StartStroke();
       // drawObject.SetActive(true);
     }
-    else if (Input.GetMouseButton(0) == false && editingMode == 4)
+    else if (!Input.GetMouseButton(0) && editingMode == 4)
     {
       EndStroke();
       // drawObject.SetActive(false);
     }
-    else
-    {
-      // drawObject.SetActive(false);
-    }
+#endif
   }
 
   public void StartStroke()

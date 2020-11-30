@@ -24,7 +24,7 @@ public class FlyCamera : MonoBehaviour
 
   void Update()
   {
-    editingMode = GameObject.Find("Main Camera").GetComponent<RaycastManager>().editingMode;
+    editingMode = Camera.main.GetComponent<RaycastManager>().editingMode;
 
     // if (Input.GetKey(KeyCode.Z) || (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)))
     if (Input.GetKey(KeyCode.LeftAlt))

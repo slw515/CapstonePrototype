@@ -5,6 +5,7 @@ using UnityEngine;
 public class Stroke : MonoBehaviour
 {
   public GameObject penPoint;
+  public GameObject cam;
   // Start is called before the first frame update
   void Start()
   {
@@ -14,7 +15,14 @@ public class Stroke : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
+
+#if UNITY_IPHONE && !UNITY_EDITOR
+    int editingMode = GameObject.Find("AR Session Origin").GetComponent<RaycastManager>().editingMode;
+#endif
+
+#if UNITY_EDITOR
     int editingMode = GameObject.Find("Main Camera").GetComponent<RaycastManager>().editingMode;
+#endif
 
     if (Draw.drawing && editingMode == 4)
     {

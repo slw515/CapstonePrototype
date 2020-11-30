@@ -4,5 +4,13 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
-  m_configObjects: {}
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/XRTest.unity
+    guid: ce46542c70c2b432e9d6079c84ebafe3
+  - enabled: 1
+    path: Assets/Mapbox/Examples/2_AstronautGame/AstronautGame.unity
+    guid: 23b3522d4f6fa450eb781397db4b26ed
+  m_configObjects:
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 57a4779c92eeb451bb2f6bf023ebf6f6,
+      type: 2}

@@ -1,16 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
+using UnityEngine.EventSystems;
+using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
+
+[RequireComponent(typeof(ARRaycastManager))]
 public class RaycastManager : MonoBehaviour
 {
+  ARSessionOrigin origin;
+  static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
   [SerializeField]
   private GameObject placedPrefab;
   // Start is called before the first frame update
   [SerializeField]
   private GameObject previewShape;
 
+  [SerializeField]
+  private GameObject placementIndicator;
+  private ARRaycastManager arRaycastManager;
+  private GameObject reticle;
   [SerializeField]
   private Material previewMaterial;
 
@@ -23,10 +34,15 @@ public class RaycastManager : MonoBehaviour
   public GameObject[] opaqueObjects;
   [SerializeField]
   GameObject ForwardArrow;
-
+  private Color currentColor;
   public GameObject colorWheelUIElement;
+  public GameObject selectedOverlay;
+
   private bool snapMode = true;
   public GameObject emptyObject;
+  private GameObject[] setActiveOverlay;
+  private float penDistance = 0.4f;
+  private bool isShortenedDrawing = false;
   public GameObject PlacedPrefab
   {
     get
@@ -43,6 +59,12 @@ public class RaycastManager : MonoBehaviour
 
   void Start()
   {
+    currentColor = new Color(0, 0, 0);
+    setActiveOverlay = GameObject.FindGameObjectsWithTag("ShowActiveOverlay");
+    foreach (GameObject overlay in setActiveOverlay)
+    {
+      overlay.SetActive(false);
+    }
     previewObjects[0] = GameObject.CreatePrimitive(PrimitiveType.Cube);
     previewObjects[1] = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
     previewObjects[2] = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -58,59 +80,107 @@ public class RaycastManager : MonoBehaviour
       shape.transform.position = new Vector3(-2, -500, -2);
       shape.name = "Transparent";
       shape.GetComponent<MeshRenderer>().material = previewMaterial;
+      shape.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
       shape.layer = LayerMask.NameToLayer("Ignore Raycast");
+      shape.SetActive(false);
     }
 
     foreach (GameObject shape in opaqueObjects)
     {
       shape.transform.position = new Vector3(-2, -500, -2);
+      shape.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
       shape.name = "PlacedShape";
     }
     placedPrefab.name = "PlacedShape";
-    previewShape = previewObjects[2];
+    previewObjects[0].SetActive(true);
+    previewShape = previewObjects[0];
+    placedPrefab = opaqueObjects[0];
+    // #if UNITY_IPHONE
+    arRaycastManager = GetComponent<ARRaycastManager>();
+    placementIndicator = placementIndicator.transform.GetChild(0).gameObject;
+    reticle = GameObject.Find("ReticleDraw");
+    setActiveOverlay[5].SetActive(true);
+    selectedOverlay = setActiveOverlay[5];
+    // #endif
   }
 
   // Update is called once per frame
   void Update()
   {
-    Vector3 startPoint = Input.mousePosition;
-
-    Ray theRay = Camera.main.ScreenPointToRay(startPoint);
-    RaycastHit hitInfo;
-    if (editingMode == 0)
+    if (selectedOverlay.GetComponent<Image>().color != currentColor)
     {
+      selectedOverlay.GetComponent<Image>().color = currentColor;
+    }
+    if (GameObject.Find("ColorPalette")?.GetComponent<ColorPaletteController>())
+    {
+      currentColor = GameObject.Find("ColorPalette").GetComponent<ColorPaletteController>().SelectedColor;
+      // colorPicker.GetComponent<Image>().color = ;
+    }
+#if UNITY_EDITOR
+    if (editingMode == 0 || editingMode == 6 || editingMode == 7)
+    {
+      Vector3 startPoint = Input.mousePosition;
+      reticle.SetActive(false);
+      Ray theRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+      RaycastHit hitInfo;
       if (Input.GetMouseButtonDown(0))
       {
         if (!IsPointerOverUIObject())
         {
           if (Physics.Raycast(theRay, out hitInfo))
           {
-            Vector3 position = hitInfo.transform.position + hitInfo.normal;
-            Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
-            objectHit = hitInfo.transform.gameObject;
-            if (objectHit.name == "Plane")
+            if (editingMode == 0)
             {
-              var instantiatedObject = Instantiate(placedPrefab, hitInfo.point, objectHit.transform.rotation) as GameObject;
-              instantiatedObject.transform.parent = emptyObject.transform;
-              instantiatedObject.GetComponent<MeshRenderer>().material = placedMaterial;
-              instantiatedObject.AddComponent<DragObject>();
-
-            }
-            else if (objectHit.name == "PlacedShape(Clone)")
-            {
-              if (snapMode)
+              Vector3 position = hitInfo.transform.position + Vector3.Scale(hitInfo.normal, new Vector3(0.2f, 0.2f, 0.2f));
+              Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+              objectHit = hitInfo.transform.gameObject;
+              if (objectHit.name == "Plane")
               {
-                var instantiatedObject = Instantiate(placedPrefab, position, rotation) as GameObject;
-                instantiatedObject.transform.localScale = objectHit.transform.localScale;
+                var instantiatedObject = Instantiate(placedPrefab, hitInfo.point, objectHit.transform.rotation) as GameObject;
+                instantiatedObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
                 instantiatedObject.transform.parent = emptyObject.transform;
+                instantiatedObject.GetComponent<MeshRenderer>().material = placedMaterial;
+                instantiatedObject.GetComponent<Renderer>().material.color = currentColor;
                 instantiatedObject.AddComponent<DragObject>();
               }
-              else
+              else if (objectHit.name == "PlacedShape(Clone)")
               {
-                var instantiatedObject = Instantiate(placedPrefab, hitInfo.point, rotation) as GameObject;
-                instantiatedObject.transform.localScale = objectHit.transform.localScale;
-                instantiatedObject.transform.parent = emptyObject.transform;
-                instantiatedObject.AddComponent<DragObject>();
+                if (snapMode)
+                {
+                  var instantiatedObject = Instantiate(placedPrefab, position, rotation) as GameObject;
+                  instantiatedObject.transform.localScale = objectHit.transform.localScale;
+                  instantiatedObject.transform.parent = emptyObject.transform;
+                  instantiatedObject.GetComponent<MeshRenderer>().material = placedMaterial;
+                  instantiatedObject.GetComponent<Renderer>().material.color = currentColor;
+                  instantiatedObject.AddComponent<DragObject>();
+                }
+                else
+                {
+                  var instantiatedObject = Instantiate(placedPrefab, hitInfo.point, rotation) as GameObject;
+                  instantiatedObject.transform.localScale = objectHit.transform.localScale;
+                  instantiatedObject.GetComponent<MeshRenderer>().material = placedMaterial;
+                  instantiatedObject.GetComponent<Renderer>().material.color = currentColor;
+                  instantiatedObject.transform.parent = emptyObject.transform;
+                  instantiatedObject.AddComponent<DragObject>();
+                }
+              }
+            }
+            else if (editingMode == 6)
+            {
+              objectHit = hitInfo.transform.gameObject;
+              if (objectHit.name == "PlacedShape(Clone)")
+              {
+                Destroy(objectHit);
+              }
+            }
+            else if (editingMode == 7)
+            {
+              objectHit = hitInfo.transform.gameObject;
+              if (objectHit.name == "PlacedShape(Clone)")
+              {
+                objectHit.GetComponent<Renderer>().material.color = currentColor;
+                // 
+                // cubeRenderer.material.SetColor("_Color", currentColor);
               }
             }
           }
@@ -122,9 +192,8 @@ public class RaycastManager : MonoBehaviour
         {
           if (!IsPointerOverUIObject())
           {
-            Vector3 position = hitInfo.transform.position + hitInfo.normal;
+            Vector3 position = hitInfo.transform.position + Vector3.Scale(hitInfo.normal, new Vector3(0.2f, 0.2f, 0.2f));
             Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
-            // Debug.Log(rotation);
             objectHit = hitInfo.transform.gameObject;
             if (objectHit.name != "Transparent")
             {
@@ -132,21 +201,27 @@ public class RaycastManager : MonoBehaviour
               {
                 if (objectHit.name == "Plane")
                 {
+                  Debug.Log("In here!");
                   previewShape.transform.position = hitInfo.point;
-                  previewShape.transform.localScale = new Vector3(1, 1, 1);
-
+                  previewShape.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                  placementIndicator.transform.position = hitInfo.point;
+                  placementIndicator.transform.localRotation = rotation;
                 }
                 else
                 {
-                  previewShape.transform.position = hitInfo.transform.position + hitInfo.normal;
+                  previewShape.transform.position = position;
                   previewShape.transform.localRotation = rotation;
                   previewShape.transform.localScale = objectHit.transform.localScale;
+                  placementIndicator.transform.position = position;
+                  placementIndicator.transform.localRotation = rotation;
 
                 }
               }
               else
               {
                 previewShape.transform.position = hitInfo.point;
+                placementIndicator.transform.position = hitInfo.point;
+                placementIndicator.transform.localRotation = rotation;
               }
             }
           }
@@ -157,6 +232,11 @@ public class RaycastManager : MonoBehaviour
     {
       if (Input.GetMouseButton(0))
       {
+        Vector3 startPoint = Input.mousePosition;
+
+        Ray theRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        RaycastHit hitInfo;
+
         if (!IsPointerOverUIObject())
         {
           if (Physics.Raycast(theRay, out hitInfo))
@@ -165,7 +245,213 @@ public class RaycastManager : MonoBehaviour
           }
         }
       }
+      else
+      {
+        if (editingMode == 4)
+        {
+          reticle.GetComponent<Renderer>().material.color = new Color(currentColor.r, currentColor.g, currentColor.b, 0.4f);
+          reticle.SetActive(true);
+          Vector3 startPoint = Input.mousePosition;
+          GameObject penPoint = GameObject.Find("PenPoint");
+          Ray theRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)); ;
+          RaycastHit hitInfo;
+          if (Physics.Raycast(theRay, out hitInfo, 0.4f))
+          {
+            // reticle.GetComponent<CircleDraw>().isIntersecting = true;
+            reticle.transform.position = hitInfo.point;
+            penPoint.transform.position = hitInfo.point;
+            objectHit = hitInfo.transform.gameObject;
+
+            if (Input.GetMouseButton(0))
+            {
+              penDistance = hitInfo.point.z;
+              isShortenedDrawing = true;
+            }
+            else
+            {
+              penDistance = 0.4f;
+              isShortenedDrawing = false;
+            }
+
+          }
+          else
+          {
+            if (isShortenedDrawing == true)
+            {
+              if (!Input.GetMouseButton(0))
+              {
+                isShortenedDrawing = false;
+              }
+              penPoint.transform.position = Camera.main.transform.position + Camera.main.transform.forward * penDistance;
+              reticle.transform.position = Camera.main.transform.position + Camera.main.transform.forward * penDistance;
+            }
+            else
+            {
+              penPoint.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.4f;
+              reticle.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.4f;
+            }
+            // reticle.GetComponent<CircleDraw>().isIntersecting = false;
+          }
+        }
+      }
     }
+#endif
+#if UNITY_IPHONE && !UNITY_EDITOR
+    if (editingMode == 0 || editingMode == 6 || editingMode == 7)
+    {
+      Ray theRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+      RaycastHit hitInfo;
+      if (Input.touchCount == 0) {
+        if (Physics.Raycast(theRay, out hitInfo))
+        {
+          Vector3 position = hitInfo.transform.position + Vector3.Scale(hitInfo.normal, new Vector3(0.2f, 0.2f, 0.2f));
+          Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+
+          objectHit = hitInfo.transform.gameObject;
+
+          if (objectHit.name != "Transparent")
+          {
+            if (snapMode)
+            {
+              if (objectHit.name == "PlacedShape(Clone)")
+              {
+                previewShape.transform.position = position;
+                previewShape.transform.localRotation = rotation;
+                previewShape.transform.localScale = objectHit.transform.localScale;
+              }            
+              else if (arRaycastManager.Raycast(Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), s_Hits, TrackableType.Planes))
+              {
+                var hitPose = s_Hits[0].pose;
+                placementIndicator.transform.position = hitPose.position;
+                previewShape.transform.position = hitPose.position;
+                previewShape.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                previewShape.transform.localRotation = rotation;
+                placementIndicator.transform.localRotation = Quaternion.identity;
+              }
+            }
+            else
+            {
+              previewShape.transform.position = hitInfo.point;
+            }
+          }
+        }
+      }
+      if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began)
+      {
+        if (!IsPointerOverUIObject())
+        {
+          if (Physics.Raycast(theRay, out hitInfo))
+          {
+            if (editingMode == 0)
+            {
+              Vector3 position = hitInfo.transform.position + Vector3.Scale(hitInfo.normal, new Vector3(0.2f, 0.2f, 0.2f));
+              Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+              objectHit = hitInfo.transform.gameObject;
+              if (objectHit.name == "PlacedShape(Clone)")
+              {
+                if (snapMode)
+                {
+                  var instantiatedObject = Instantiate(placedPrefab, position, rotation) as GameObject;
+                  instantiatedObject.transform.localScale = objectHit.transform.localScale;
+                  instantiatedObject.transform.parent = emptyObject.transform;
+                  instantiatedObject.GetComponent<MeshRenderer>().material = placedMaterial;
+                  instantiatedObject.GetComponent<Renderer>().material.color = currentColor;
+                  instantiatedObject.AddComponent<DragObject>();
+                }
+                else
+                {
+                  var instantiatedObject = Instantiate(placedPrefab, hitInfo.point, rotation) as GameObject;
+                  instantiatedObject.transform.localScale = objectHit.transform.localScale;
+                  instantiatedObject.transform.parent = emptyObject.transform;
+                  instantiatedObject.GetComponent<MeshRenderer>().material = placedMaterial;
+                  instantiatedObject.GetComponent<Renderer>().material.color = currentColor;
+                  instantiatedObject.AddComponent<DragObject>();
+                }
+              }
+              else if (arRaycastManager.Raycast(Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), s_Hits, TrackableType.Planes))
+              {
+                var hitPose = s_Hits[0].pose;
+                var instantiatedObject = Instantiate(placedPrefab, hitPose.position, Quaternion.identity) as GameObject;
+                instantiatedObject.transform.parent = emptyObject.transform;
+                instantiatedObject.GetComponent<MeshRenderer>().material = placedMaterial;
+                instantiatedObject.GetComponent<Renderer>().material.color = currentColor;
+                instantiatedObject.AddComponent<DragObject>();
+
+              }
+            }
+            else if (editingMode == 6)
+            {
+              objectHit = hitInfo.transform.gameObject;
+              if (objectHit.name == "PlacedShape(Clone)" || objectHit.name == "Stroke(Clone)")
+              {
+                Destroy(objectHit);
+              }
+            }
+            else if (editingMode == 7)
+            {
+              objectHit = hitInfo.transform.gameObject;
+              if (objectHit.name == "PlacedShape(Clone)")
+              {
+                objectHit.GetComponent<Renderer>().material.color = currentColor;
+              }
+            }
+          }
+        }
+      }
+
+    }
+    else
+    {
+      if (editingMode == 4)
+        {
+          Debug.Log("shouldnt be here! pen distance is: " + penDistance);
+
+          reticle.GetComponent<Renderer>().material.color = new Color(currentColor.r, currentColor.g, currentColor.b, 0.4f);
+          GameObject penPoint = GameObject.Find("PenPoint");
+          Ray theRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+          RaycastHit hitInfo;
+          if (Physics.Raycast(theRay, out hitInfo, 0.4f))
+          {
+            if (hitInfo.transform.name != "AR Default Plane") {
+              // reticle.GetComponent<CircleDraw>().isIntersecting = true;
+              reticle.transform.position = hitInfo.point;
+              penPoint.transform.position = hitInfo.point;
+              objectHit = hitInfo.transform.gameObject;
+
+              if (Input.touchCount > 0)
+              {
+                penDistance = hitInfo.point.z;
+                isShortenedDrawing = true;
+              }
+              else
+              {
+                penDistance = 0.4f;
+                isShortenedDrawing = false;
+              }
+            }
+          }
+          else
+          {
+            if (isShortenedDrawing == true)
+            {
+              if (Input.touchCount == 0)
+              {
+                isShortenedDrawing = false;
+              }
+              penPoint.transform.position = GameObject.Find("Main Camera").transform.position + Camera.main.transform.forward * penDistance;
+              reticle.transform.position = GameObject.Find("Main Camera").transform.position + Camera.main.transform.forward * penDistance;
+            }
+            else
+            {
+              penPoint.transform.position = GameObject.Find("Main Camera").transform.position + Camera.main.transform.forward * 0.4f;
+              reticle.transform.position = GameObject.Find("Main Camera").transform.position + Camera.main.transform.forward * 0.4f;
+            }
+            // reticle.GetComponent<CircleDraw>().isIntersecting = false;
+          }
+        }
+    }
+#endif
+
 
     if (Input.GetKeyDown("1"))
     {
@@ -258,11 +544,19 @@ public class RaycastManager : MonoBehaviour
       editingMode = 0;
 
       placedPrefab = opaqueObjects[0];
-      previewShape = previewObjects[0];
       foreach (GameObject shape in previewObjects)
       {
         shape.transform.position = new Vector3(-2, -2, -2);
+        shape.SetActive(false);
       }
+      previewObjects[0].SetActive(true);
+      previewShape = previewObjects[0];
+
+      selectedOverlay.SetActive(false);
+      selectedOverlay = null;
+      selectedOverlay = setActiveOverlay[5];
+      selectedOverlay.SetActive(true);
+
     }
     else if (value == 2)
     //cube
@@ -270,46 +564,65 @@ public class RaycastManager : MonoBehaviour
       editingMode = 0;
 
       placedPrefab = opaqueObjects[1];
-      previewShape = previewObjects[1];
       foreach (GameObject shape in previewObjects)
       {
         shape.transform.position = new Vector3(-2, -2, -2);
+        shape.SetActive(false);
+
       }
+      previewObjects[1].SetActive(true);
+      previewShape = previewObjects[1];
+
     }
     else if (value == 3)
-    //cube
+    //sphere create. 
     {
       editingMode = 0;
       placedPrefab = opaqueObjects[2];
-      previewShape = previewObjects[2];
       foreach (GameObject shape in previewObjects)
       {
         shape.transform.position = new Vector3(-2, -2, -2);
+        shape.SetActive(false);
+
       }
+      previewObjects[2].SetActive(true);
+
+
+      selectedOverlay.SetActive(false);
+      selectedOverlay = null;
+      selectedOverlay = setActiveOverlay[4];
+      selectedOverlay.SetActive(true);
+
+
+      previewShape = previewObjects[2];
+
     }
     else if (value == 4)
     //cube
     {
       editingMode = 0;
       placedPrefab = opaqueObjects[3];
-      previewShape = previewObjects[3];
       foreach (GameObject shape in previewObjects)
       {
         shape.transform.position = new Vector3(-2, -2, -2);
+        shape.SetActive(false);
       }
+      previewObjects[3].SetActive(true);
+      previewShape = previewObjects[3];
+
     }
 
     else if (value == 5)
     {
       editingMode = 3;
 
-      previewShape.GetComponent<Renderer>().enabled = false;
+      previewShape.SetActive(false);
     }
     else if (value == 6)
     {
       editingMode = 2;
 
-      previewShape.GetComponent<Renderer>().enabled = false;
+      previewShape.SetActive(false);
       // ForwardArrow.SetActive(false);
       // previewShape.GetComponent<Renderer>().enabled = false;
 
@@ -319,32 +632,92 @@ public class RaycastManager : MonoBehaviour
     {
       editingMode = 4;
 
-      previewShape.GetComponent<Renderer>().enabled = false;
+      previewShape.SetActive(false);
+
+      selectedOverlay.SetActive(false);
+      selectedOverlay = null;
+      selectedOverlay = setActiveOverlay[2];
+      selectedOverlay.SetActive(true);
 
     }
     else if (value == 8)
     {
       editingMode = 1;
 
-      previewShape.GetComponent<Renderer>().enabled = false;
+      previewShape.SetActive(false);
+
+      selectedOverlay.SetActive(false);
+      selectedOverlay = null;
+      selectedOverlay = setActiveOverlay[0];
+      selectedOverlay.SetActive(true);
 
     }
     else if (value == 9)
     {
       editingMode = 5;
 
-      previewShape.GetComponent<Renderer>().enabled = false;
+      previewShape.SetActive(false);
+    }
+    else if (value == 10)
+    {
+      editingMode = 6;
+      previewShape.SetActive(false);
+
+      selectedOverlay.SetActive(false);
+      selectedOverlay = null;
+      selectedOverlay = setActiveOverlay[3];
+      selectedOverlay.SetActive(true);
+    }
+    else if (value == 11)
+    {
+      editingMode = 7;
+      previewShape.SetActive(false);
     }
   }
   //When Touching UI
   private bool IsPointerOverUIObject()
   {
+
+#if UNITY_EDITOR
     PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+
     eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+
+
     List<RaycastResult> results = new List<RaycastResult>();
     EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
     return results.Count > 0;
+#endif
+#if UNITY_IPHONE && !UNITY_EDITOR
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+
+        eventDataCurrentPosition.position = new Vector2(Input.touches[0].position.x, Input.touches[0].position.y);
+
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
+#endif
+
+    // var pointer = new PointerEventData(EventSystem.current) { position = new Vector2(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y) };
+    // var raycastResults = new List<RaycastResult>();
+    // EventSystem.current.RaycastAll(pointer, raycastResults);
+    // if (raycastResults.Count > 0)
+    // {
+    //   var ui = raycastResults.Find((obj) => obj.gameObject.layer == 5);
+    //   if (ui.gameObject != null)
+    //   {
+    //     Debug.Log("touching UI");
+    //     return true;
+    //   }
+    //   Debug.Log("not touching UI");
+    //   return false;
+
+    // }
+
+    // return false;
   }
+
 
   public void toggleColorWheel()
   {
