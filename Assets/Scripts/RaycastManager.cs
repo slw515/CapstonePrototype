@@ -64,6 +64,7 @@ public class RaycastManager : MonoBehaviour
     foreach (GameObject overlay in setActiveOverlay)
     {
       overlay.SetActive(false);
+      Debug.Log("name of gameobject in order is: " + overlay.transform.name);
     }
     previewObjects[0] = GameObject.CreatePrimitive(PrimitiveType.Cube);
     previewObjects[1] = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
@@ -404,7 +405,6 @@ public class RaycastManager : MonoBehaviour
     {
       if (editingMode == 4)
         {
-          Debug.Log("shouldnt be here! pen distance is: " + penDistance);
 
           reticle.GetComponent<Renderer>().material.color = new Color(currentColor.r, currentColor.g, currentColor.b, 0.4f);
           GameObject penPoint = GameObject.Find("PenPoint");
@@ -555,6 +555,7 @@ public class RaycastManager : MonoBehaviour
       selectedOverlay.SetActive(false);
       selectedOverlay = null;
       selectedOverlay = setActiveOverlay[5];
+
       selectedOverlay.SetActive(true);
 
     }
@@ -590,7 +591,9 @@ public class RaycastManager : MonoBehaviour
 
       selectedOverlay.SetActive(false);
       selectedOverlay = null;
-      selectedOverlay = setActiveOverlay[4];
+      // selectedOverlay = setActiveOverlay[4];
+      selectedOverlay = setActiveOverlay[3];
+
       selectedOverlay.SetActive(true);
 
 
@@ -636,7 +639,9 @@ public class RaycastManager : MonoBehaviour
 
       selectedOverlay.SetActive(false);
       selectedOverlay = null;
-      selectedOverlay = setActiveOverlay[2];
+      // selectedOverlay = setActiveOverlay[2];
+      selectedOverlay = setActiveOverlay[1];
+
       selectedOverlay.SetActive(true);
 
     }
@@ -648,7 +653,9 @@ public class RaycastManager : MonoBehaviour
 
       selectedOverlay.SetActive(false);
       selectedOverlay = null;
-      selectedOverlay = setActiveOverlay[0];
+      // selectedOverlay = setActiveOverlay[0];
+      selectedOverlay = setActiveOverlay[2];
+
       selectedOverlay.SetActive(true);
 
     }
@@ -665,7 +672,9 @@ public class RaycastManager : MonoBehaviour
 
       selectedOverlay.SetActive(false);
       selectedOverlay = null;
-      selectedOverlay = setActiveOverlay[3];
+      // selectedOverlay = setActiveOverlay[3];
+      selectedOverlay = setActiveOverlay[4];
+
       selectedOverlay.SetActive(true);
     }
     else if (value == 11)
