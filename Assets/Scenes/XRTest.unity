@@ -4487,6 +4487,7 @@ GameObject:
   - component: {fileID: 797442336}
   - component: {fileID: 797442335}
   - component: {fileID: 797442338}
+  - component: {fileID: 797442339}
   m_Layer: 0
   m_Name: AR Session Origin
   m_TagString: Untagged
@@ -4600,6 +4601,18 @@ MonoBehaviour:
   spacePenPoint: {fileID: 547190484}
   stroke: {fileID: 7722392120260345124, guid: e314d4f3c83174908856e37dab4c4c9c, type: 3}
   colorPicker: {fileID: 1955532516}
+--- !u!114 &797442339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 797442332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1917a92dca10b48b396420efce7f4c4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &816517888
 GameObject:
   m_ObjectHideFlags: 0
@@ -6885,11 +6898,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1390346550}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64a9ab5154a624046a63fd364eb90a76, type: 3}
+  m_Script: {fileID: 11500000, guid: c6fd8b1e963de495f9a59044204d1f1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ContainerForCreation: {fileID: 691906589}
-  playerDisplay: {fileID: 0}
+  playerDisplay: {fileID: 1479232796}
 --- !u!1 &1393871990
 GameObject:
   m_ObjectHideFlags: 0

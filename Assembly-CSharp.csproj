@@ -512,13 +512,11 @@
      <Compile Include="Assets\Scripts\FlyCamera.cs" />
      <Compile Include="Assets\Scripts\GeoLocation\GeoLocation.cs" />
      <Compile Include="Assets\Scripts\LoginRegisterScripts\DBManager.cs" />
-     <Compile Include="Assets\Scripts\LoginRegisterScripts\Game.cs" />
      <Compile Include="Assets\Scripts\LoginRegisterScripts\Login.cs" />
      <Compile Include="Assets\Scripts\LoginRegisterScripts\MainMenu.cs" />
      <Compile Include="Assets\Scripts\LoginRegisterScripts\Registration.cs" />
      <Compile Include="Assets\Scripts\PointAtCamera.cs" />
      <Compile Include="Assets\Scripts\PostCreation\PullDataFromCreations.cs" />
-     <Compile Include="Assets\Scripts\PostCreation\SubmitCreation.cs" />
      <Compile Include="Assets\Scripts\PostCreation\SubmitCreationToDB.cs" />
      <Compile Include="Assets\Scripts\RaycastManager.cs" />
      <Compile Include="Assets\Scripts\Stroke.cs" />

@@ -59,7 +59,8 @@ public class SubmitCreationToDB : MonoBehaviour
     form.AddField("posX", childInContainer.position.x.ToString());
     form.AddField("posY", childInContainer.position.y.ToString());
     form.AddField("posZ", childInContainer.position.z.ToString());
-
+    form.AddField("latitude", GeoLocation.UserLatitude.ToString());
+    form.AddField("longitude", GeoLocation.UserLongitude.ToString());
 
     WWW www = new WWW("http://stevenwyks.com/postCreations.php", form);
     Debug.Log(www.text);
