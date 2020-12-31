@@ -510,6 +510,7 @@
      <Compile Include="Assets\Scripts\DragObject.cs" />
      <Compile Include="Assets\Scripts\Draw.cs" />
      <Compile Include="Assets\Scripts\FlyCamera.cs" />
+     <Compile Include="Assets\Scripts\GeoLocation\GeoLocation.cs" />
      <Compile Include="Assets\Scripts\LoginRegisterScripts\DBManager.cs" />
      <Compile Include="Assets\Scripts\LoginRegisterScripts\Game.cs" />
      <Compile Include="Assets\Scripts\LoginRegisterScripts\Login.cs" />
