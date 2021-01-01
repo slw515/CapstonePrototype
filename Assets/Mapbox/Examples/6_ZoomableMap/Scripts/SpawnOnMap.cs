@@ -1,55 +1,69 @@
 ﻿namespace Mapbox.Examples
 {
-	using UnityEngine;
-	using Mapbox.Utils;
-	using Mapbox.Unity.Map;
-	using Mapbox.Unity.MeshGeneration.Factories;
-	using Mapbox.Unity.Utilities;
-	using System.Collections.Generic;
+  using UnityEngine;
+  using Mapbox.Utils;
+  using Mapbox.Unity.Map;
+  using Mapbox.Unity.MeshGeneration.Factories;
+  using Mapbox.Unity.Utilities;
+  using System.Collections.Generic;
+  using SimpleJSON;
+  using System.Collections;
 
-	public class SpawnOnMap : MonoBehaviour
-	{
-		[SerializeField]
-		AbstractMap _map;
 
-		[SerializeField]
-		[Geocode]
-		string[] _locationStrings;
-		Vector2d[] _locations;
+  public class SpawnOnMap : MonoBehaviour
+  {
+    [SerializeField]
+    AbstractMap _map;
 
-		[SerializeField]
-		float _spawnScale = 100f;
+    [SerializeField]
+    [Geocode]
+    string[] _locationStrings;
+    Vector2d[] _locations;
 
-		[SerializeField]
-		GameObject _markerPrefab;
+    [SerializeField]
+    float _spawnScale = 100f;
 
-		List<GameObject> _spawnedObjects;
+    [SerializeField]
+    GameObject _markerPrefab;
 
-		void Start()
-		{
-			_locations = new Vector2d[_locationStrings.Length];
-			_spawnedObjects = new List<GameObject>();
-			for (int i = 0; i < _locationStrings.Length; i++)
-			{
-				var locationString = _locationStrings[i];
-				_locations[i] = Conversions.StringToLatLon(locationString);
-				var instance = Instantiate(_markerPrefab);
-				instance.transform.localPosition = _map.GeoToWorldPosition(_locations[i], true);
-				instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
-				_spawnedObjects.Add(instance);
-			}
-		}
+    List<GameObject> _spawnedObjects;
+    private JSONNode parsedData;
+    void Start()
+    {
+      StartCoroutine(CoroutineDemonstration());
+      _locations = new Vector2d[_locationStrings.Length];
+      _spawnedObjects = new List<GameObject>();
+      Debug.Log("Hey there: " + parsedData[0]);
+    }
 
-		private void Update()
-		{
-			int count = _spawnedObjects.Count;
-			for (int i = 0; i < count; i++)
-			{
-				var spawnedObject = _spawnedObjects[i];
-				var location = _locations[i];
-				spawnedObject.transform.localPosition = _map.GeoToWorldPosition(location, true);
-				spawnedObject.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
-			}
-		}
-	}
+    IEnumerator CoroutineDemonstration()
+    {
+      StartCoroutine(PullLongLat.PullLongLatFromCreationTable());
+      yield return new WaitForSeconds(0.8f);
+      parsedData = PullLongLat.parsedData;
+      Debug.Log("parsed data is: " + parsedData);
+      for (int i = 0; i < parsedData.Count; i++)
+      {
+        string LatLonString = parsedData[i]["latitude"] + "," + parsedData[i]["longitude"];
+        Debug.Log(LatLonString);
+        _locations[i] = Conversions.StringToLatLon(LatLonString);
+        var instance = Instantiate(_markerPrefab);
+        instance.transform.localPosition = _map.GeoToWorldPosition(_locations[i], true);
+        instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
+        _spawnedObjects.Add(instance);
+      }
+    }
+
+    private void Update()
+    {
+      int count = _spawnedObjects.Count;
+      for (int i = 0; i < count; i++)
+      {
+        var spawnedObject = _spawnedObjects[i];
+        var location = _locations[i];
+        spawnedObject.transform.localPosition = _map.GeoToWorldPosition(location, true);
+        spawnedObject.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
+      }
+    }
+  }
 }

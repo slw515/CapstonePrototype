@@ -1,20 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SimpleJSON;
 
 public class PullLongLat : MonoBehaviour
 {
   ArrayList arlist = new ArrayList();
+  public static JSONNode parsedData;
   public void Awake()
   {
     if (DBManager.username == null)
     {
       UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
-    StartCoroutine(PullLongLatFromCreationTable());
   }
 
-  IEnumerator PullLongLatFromCreationTable()
+  public static IEnumerator PullLongLatFromCreationTable()
   {
     WWWForm form = new WWWForm();
 
@@ -23,8 +24,8 @@ public class PullLongLat : MonoBehaviour
 
     yield return www;
     Debug.Log("DSadas");
-    Debug.Log(www.text);
 
+    parsedData = JSON.Parse(www.text);
     // yield return currIndex;
   }
 

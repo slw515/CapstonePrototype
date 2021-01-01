@@ -332,7 +332,6 @@ namespace Mapbox.Unity.Map
       {
         TileProvider.UpdateTileProvider();
       }
-      Debug.Log(CenterLatitudeLongitude);
     }
 
     public virtual void UpdateMap()
