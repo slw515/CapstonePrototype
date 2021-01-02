@@ -21,7 +21,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 2}
-  m_MinSize: {x: 875, y: 300}
+  m_MinSize: {x: 875, y: 392}
   m_MaxSize: {x: 10000, y: 10000}
   m_Maximized: 1
 --- !u!114 &2
@@ -46,7 +46,7 @@ MonoBehaviour:
     y: 0
     width: 1680
     height: 954
-  m_MinSize: {x: 875, y: 300}
+  m_MinSize: {x: 875, y: 392}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &3
 MonoBehaviour:
@@ -115,7 +115,7 @@ MonoBehaviour:
   m_MinSize: {x: 881, y: 342}
   m_MaxSize: {x: 16006, y: 8042}
   vertical: 0
-  controlID: 17529
+  controlID: 2180
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_MinSize: {x: 605, y: 342}
   m_MaxSize: {x: 12005, y: 8042}
   vertical: 1
-  controlID: 17588
+  controlID: 2181
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_MinSize: {x: 605, y: 221}
   m_MaxSize: {x: 12005, y: 4021}
   vertical: 0
-  controlID: 17589
+  controlID: 2182
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -420,9 +420,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 02490000
-      m_LastClickedID: 18690
-      m_ExpandedIDs: ecf9ffff66fbffff50490000
+      m_SelectedIDs: d45c0000
+      m_LastClickedID: 23764
+      m_ExpandedIDs: 80bdffff9abdfffffcbfffff1af7ffff34f7ffff96f9ffff66fbffffd45c0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -482,9 +482,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 1.3965547, y: 68.499374, z: -80.13934}
+    m_Target: {x: -12.466198, y: 178.62259, z: -87.345184}
     speed: 2
-    m_Value: {x: 1.3965547, y: 68.499374, z: -80.13934}
+    m_Value: {x: -12.466198, y: 178.62259, z: -87.345184}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -534,9 +534,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 46.37957
+    m_Target: 121.16761
     speed: 2
-    m_Value: 46.37957
+    m_Value: 121.16761
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -614,7 +614,7 @@ MonoBehaviour:
     height: 251
   m_ViewDataDictionary: {fileID: 0}
   m_SearchFilter:
-    m_NameFilter: 
+    m_NameFilter: abstra
     m_ClassNames: []
     m_AssetLabels: []
     m_AssetBundleNames: []
@@ -626,20 +626,20 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/PostCreation
+    - Assets/Plugins
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts/PostCreation
+  - Assets/Plugins
   m_LastFoldersGridSize: -1
   m_LastProjectPath: /Users/stevenwyks/Documents/Unity Projects/FirstPrototype
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 105}
-    m_SelectedIDs: 18460000
-    m_LastClickedID: 17944
-    m_ExpandedIDs: 00000000c4430000c6430000c8430000ca430000cc430000ce430000d0430000d2430000d4430000d643000000ca9a3b
+    scrollPos: {x: 0, y: 9}
+    m_SelectedIDs: 
+    m_LastClickedID: 0
+    m_ExpandedIDs: 00000000da410000dc410000de410000e0410000e2410000e4410000e6410000e8410000ea410000ec41000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -667,7 +667,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000c4430000c6430000c8430000ca430000cc430000ce430000d0430000d2430000d4430000d643000000ca9a3b
+    m_ExpandedIDs: 00000000da410000dc410000de410000e0410000e2410000e4410000e6410000e8410000ea410000ec41000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -692,8 +692,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 02490000
-    m_LastClickedInstanceID: 18690
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c62300008851000000000000
     m_RenameOverlay:
@@ -711,7 +711,7 @@ MonoBehaviour:
       m_IsRenaming: 0
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 11}
+      m_ClientGUIView: {fileID: 0}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0

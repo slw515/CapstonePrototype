@@ -520,6 +520,9 @@
      <Compile Include="Assets\Scripts\PostCreation\PullLongLat.cs" />
      <Compile Include="Assets\Scripts\PostCreation\SubmitCreationToDB.cs" />
      <Compile Include="Assets\Scripts\RaycastManager.cs" />
+     <Compile Include="Assets\Scripts\RenderModelAndGuessScene\DataForRender.cs" />
+     <Compile Include="Assets\Scripts\RenderModelAndGuessScene\DisplayModelFromDB.cs" />
+     <Compile Include="Assets\Scripts\RenderModelAndGuessScene\PullDataFromCreationsRender.cs" />
      <Compile Include="Assets\Scripts\Stroke.cs" />
      <Compile Include="Assets\Scripts\TargetManager.cs" />
      <Compile Include="Assets\ScrollAndPinch.cs" />

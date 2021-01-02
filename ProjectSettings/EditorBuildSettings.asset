@@ -23,6 +23,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/CameraPanTest.unity
     guid: 2abea47a18ec4477781bbbca75fc2142
+  - enabled: 1
+    path: Assets/Scenes/RenderAndGuessModel.unity
+    guid: eddb57fcac80b4a5380bdd6898631eca
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 57a4779c92eeb451bb2f6bf023ebf6f6,
       type: 2}

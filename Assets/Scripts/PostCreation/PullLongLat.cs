@@ -18,20 +18,20 @@ public class PullLongLat : MonoBehaviour
   public static IEnumerator PullLongLatFromCreationTable()
   {
     WWWForm form = new WWWForm();
+    float latHardCode = 14.3f;
+    float longHardCode = 121f;
 
+    Debug.Log("current latitude is: " + GeoLocation.UserLatitude);
+
+    // form.AddField("latitude", GeoLocation.UserLatitude.ToString());
+    // form.AddField("longitude", GeoLocation.UserLongitude.ToString());
+
+    form.AddField("latitude", latHardCode.ToString());
+    form.AddField("longitude", longHardCode.ToString());
     WWW www = new WWW("http://stevenwyks.com/pullLongLatFromDB.php", form);
-    Debug.Log("heya!");
-
     yield return www;
-    Debug.Log("DSadas");
-
+    Debug.Log(www.text);
     parsedData = JSON.Parse(www.text);
-    // yield return currIndex;
-  }
-
-  // Update is called once per frame
-  void Update()
-  {
-
+    Debug.Log("data in IEnumerator call: " + parsedData);
   }
 }

@@ -23,7 +23,7 @@ public class GeoLocation : MonoBehaviour
     Input.location.Start();
     while (Input.location.status == LocationServiceStatus.Initializing)
     {
-      yield return new WaitForSeconds(0.7f);
+      yield return new WaitForSeconds(0.4f);
     }
     UserLatitude = Input.location.lastData.latitude;
     UserLongitude = Input.location.lastData.longitude;
