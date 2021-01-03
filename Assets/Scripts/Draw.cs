@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using System;
 public class Draw : MonoBehaviour
 {
   public bool mouseLookTesting;
@@ -101,11 +101,18 @@ public class Draw : MonoBehaviour
       if (currentStroke.GetComponent<MeshFilter>() == null)
       {
         Vector3[] positions = new Vector3[1000];
+        string xString = "";
+        string yString = "";
+        string zString = "";
+
         int counter = currentStroke.GetComponent<TrailRenderer>().GetPositions(positions);
-        // for (int i = 0; i < counter; i++)
-        // {
-        Debug.Log(positions[1].x);
-        // }
+        for (int i = 0; i < counter; i++)
+        {
+          xString = xString + Math.Round(positions[i].x, 3) + ",";
+          yString = yString + Math.Round(positions[i].y, 3) + ",";
+          zString = zString + Math.Round(positions[i].z, 3) + ",";
+
+        }
       }
       currentStroke = null;
       drawing = false;

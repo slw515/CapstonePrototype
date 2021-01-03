@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using System;
 public class SubmitCreationToDB : MonoBehaviour
 {
   [SerializeField]
@@ -60,19 +60,28 @@ public class SubmitCreationToDB : MonoBehaviour
     {
       objectType[0] = "Trail";
       Vector3[] positions = new Vector3[1000];
-      string xString, yString, zString;
+      string xString = "";
+      string yString = "";
+      string zString = "";
+
       int counter = childInContainer.GetComponent<TrailRenderer>().GetPositions(positions);
       for (int i = 0; i < counter; i++)
       {
+        xString = xString + Math.Round(positions[i].x, 3) + ",";
+        yString = yString + Math.Round(positions[i].y, 3) + ",";
+        zString = zString + Math.Round(positions[i].z, 3) + ",";
 
       }
-      // form.AddField("positionsOfTrailX", positions[i].x.ToString());
-      // form.AddField("positionsOfTrailY", positions[i].y.ToString());
-      // form.AddField("positionsOfTrailZ", positions[i].z.ToString());
+      form.AddField("trailPositionsX", xString);
+      form.AddField("trailPositionsY", yString);
+      form.AddField("trailPositionsZ", zString);
     }
     else
     {
       objectType[0] = childInContainer.GetComponent<MeshFilter>().mesh.name.Split(' ')[0];
+      form.AddField("trailPositionsX", "1");
+      form.AddField("trailPositionsY", "1");
+      form.AddField("trailPositionsZ", "1");
     }
     Debug.Log("uploading type: " + objectType[0]);
     form.AddField("username", DBManager.username);
