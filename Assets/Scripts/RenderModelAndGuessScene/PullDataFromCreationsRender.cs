@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using SimpleJSON;
 using UnityEngine.SceneManagement;
-
+using System.Linq;
 public class PullDataFromCreationsRender : MonoBehaviour
 {
   // Start is called before the first frame update
+  [SerializeField]
+  private GameObject trailRenderPrefab;
   public static JSONNode parsedPositionData;
   void Start()
   {
@@ -18,7 +20,7 @@ public class PullDataFromCreationsRender : MonoBehaviour
 
   }
 
-  public static IEnumerator PullObjectsDataFromCreationTable()
+  public IEnumerator PullObjectsDataFromCreationTable()
   {
     WWWForm form = new WWWForm();
 
@@ -29,7 +31,6 @@ public class PullDataFromCreationsRender : MonoBehaviour
     parsedPositionData = JSON.Parse(www.text);
     for (int i = 0; i < parsedPositionData.Count; i++)
     {
-      Debug.Log("type is: " + parsedPositionData[i]["objectType"]);
       GameObject spawn = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
       if (parsedPositionData[i]["objectType"] == "Cube")
@@ -42,10 +43,30 @@ public class PullDataFromCreationsRender : MonoBehaviour
       }
       else if (parsedPositionData[i]["objectType"] == "Trail")
       {
-        spawn = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        Debug.Log(parsedPositionData[i]["trailPositionsX"]);
+        spawn = Instantiate(trailRenderPrefab) as GameObject;
+        spawn.GetComponent<TrailRenderer>().AddPositions(TextToArray(parsedPositionData[i]["trailPositionsX"], parsedPositionData[i]["trailPositionsY"], parsedPositionData[i]["trailPositionsZ"]).ToArray());
       }
       spawn.transform.position = new Vector3(parsedPositionData[i]["posX"], parsedPositionData[i]["posY"], parsedPositionData[i]["posZ"]);
     }
+  }
+
+  public static List<Vector3> TextToArray(string TextX, string TextY, string TextZ)
+  {
+    Debug.Log("okat we are in function");
+
+    List<Vector3> positions = new List<Vector3>();
+    float[] XPositions = TextX.Split(',').Select(float.Parse).ToArray();
+    float[] YPositions = TextY.Split(',').Select(float.Parse).ToArray();
+    float[] ZPositions = TextZ.Split(',').Select(float.Parse).ToArray();
+
+    Debug.Log("one position is: " + XPositions[1]);
+
+    for (int i = 0; i < XPositions.Length - 1; i++)
+    {
+      positions.Add(new Vector3(XPositions[i], YPositions[i], ZPositions[i]));
+    }
+    return positions;
   }
 
   // Update is called once per frame

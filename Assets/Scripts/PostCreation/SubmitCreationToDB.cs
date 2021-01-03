@@ -70,8 +70,10 @@ public class SubmitCreationToDB : MonoBehaviour
         xString = xString + Math.Round(positions[i].x, 3) + ",";
         yString = yString + Math.Round(positions[i].y, 3) + ",";
         zString = zString + Math.Round(positions[i].z, 3) + ",";
-
       }
+      xString = xString + "1";
+      yString = yString + "1";
+      zString = zString + "1";
       form.AddField("trailPositionsX", xString);
       form.AddField("trailPositionsY", yString);
       form.AddField("trailPositionsZ", zString);

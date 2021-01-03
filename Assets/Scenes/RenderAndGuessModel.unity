@@ -627,6 +627,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 440726cbc1633492a8c487def3582266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trailRenderPrefab: {fileID: 7722392120260345124, guid: 5e3ad97cedf7b46dca7467052aee8d03,
+    type: 3}
 --- !u!4 &1613306461
 Transform:
   m_ObjectHideFlags: 0
