@@ -13,11 +13,14 @@ public class Draw : MonoBehaviour
   public GameObject cam;
   int editingMode;
   public GameObject spacePenPoint;
+  public GameObject ContainerToAdd;
   public GameObject stroke;
   public GameObject colorPicker;
 
   public static bool drawing = false;
   private Color currentColor;
+  private GameObject currentStroke;
+
 
   // Start is called before the first frame update
   void Start()
@@ -75,13 +78,19 @@ public class Draw : MonoBehaviour
 
   public void StartStroke()
   {
-    if (editingMode == 4)
+    if (editingMode == 4 && currentStroke == null)
     {
-      GameObject currentStroke;
       drawing = true;
       currentStroke = Instantiate(stroke, spacePenPoint.transform.position, spacePenPoint.transform.rotation) as GameObject;
       currentStroke.GetComponent<Renderer>().material.color = currentColor;
-      currentStroke = null;
+      currentStroke.transform.parent = ContainerToAdd.transform;
+
+    }
+    else if (editingMode == 4 && currentStroke != null)
+    {
+
+      currentStroke.transform.position = spacePenPoint.transform.position;
+      currentStroke.transform.rotation = spacePenPoint.transform.rotation;
     }
   }
 
@@ -89,6 +98,16 @@ public class Draw : MonoBehaviour
   {
     if (editingMode == 4)
     {
+      if (currentStroke.GetComponent<MeshFilter>() == null)
+      {
+        Vector3[] positions = new Vector3[1000];
+        int counter = currentStroke.GetComponent<TrailRenderer>().GetPositions(positions);
+        // for (int i = 0; i < counter; i++)
+        // {
+        Debug.Log(positions[1].x);
+        // }
+      }
+      currentStroke = null;
       drawing = false;
     }
   }

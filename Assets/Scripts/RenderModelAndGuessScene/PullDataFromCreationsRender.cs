@@ -13,6 +13,9 @@ public class PullDataFromCreationsRender : MonoBehaviour
     Debug.Log(DataForRender.objectID);
     if (DataForRender.objectID != 0)
       StartCoroutine(PullObjectsDataFromCreationTable());
+    else
+      SceneManager.LoadScene("AstronautGame");
+
   }
 
   public static IEnumerator PullObjectsDataFromCreationTable()
@@ -26,8 +29,22 @@ public class PullDataFromCreationsRender : MonoBehaviour
     parsedPositionData = JSON.Parse(www.text);
     for (int i = 0; i < parsedPositionData.Count; i++)
     {
-      GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-      cube.transform.position = new Vector3(parsedPositionData[i]["posX"], parsedPositionData[i]["posY"], parsedPositionData[i]["posZ"]);
+      Debug.Log("type is: " + parsedPositionData[i]["objectType"]);
+      GameObject spawn = GameObject.CreatePrimitive(PrimitiveType.Cube);
+
+      if (parsedPositionData[i]["objectType"] == "Cube")
+      {
+        spawn = GameObject.CreatePrimitive(PrimitiveType.Cube);
+      }
+      else if (parsedPositionData[i]["objectType"] == "Sphere")
+      {
+        spawn = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+      }
+      else if (parsedPositionData[i]["objectType"] == "Trail")
+      {
+        spawn = GameObject.CreatePrimitive(PrimitiveType.Cube);
+      }
+      spawn.transform.position = new Vector3(parsedPositionData[i]["posX"], parsedPositionData[i]["posY"], parsedPositionData[i]["posZ"]);
     }
   }
 

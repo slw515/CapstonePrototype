@@ -141,6 +141,8 @@ public class RaycastManager : MonoBehaviour
                 instantiatedObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
                 instantiatedObject.transform.parent = emptyObject.transform;
                 instantiatedObject.GetComponent<MeshRenderer>().material = placedMaterial;
+                Debug.Log("should display type of mesh: " + instantiatedObject.GetComponent<MeshFilter>().mesh.name);
+
                 instantiatedObject.GetComponent<Renderer>().material.color = currentColor;
                 instantiatedObject.AddComponent<DragObject>();
               }
@@ -202,7 +204,6 @@ public class RaycastManager : MonoBehaviour
               {
                 if (objectHit.name == "Plane")
                 {
-                  Debug.Log("In here!");
                   previewShape.transform.position = hitInfo.point;
                   previewShape.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
                   placementIndicator.transform.position = hitInfo.point;

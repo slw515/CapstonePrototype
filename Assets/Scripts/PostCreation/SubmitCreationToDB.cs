@@ -53,7 +53,28 @@ public class SubmitCreationToDB : MonoBehaviour
   {
     // if (string.IsNullOrEmpty(childInContainer.name))
     //   throw new System.ArgumentNullException(nameof(childInContainer.name));
+    string[] objectType = new string[1];
     WWWForm form = new WWWForm();
+
+    if (childInContainer.GetComponent<MeshFilter>() == null)
+    {
+      objectType[0] = "Trail";
+      Vector3[] positions = new Vector3[1000];
+      string xString, yString, zString;
+      int counter = childInContainer.GetComponent<TrailRenderer>().GetPositions(positions);
+      for (int i = 0; i < counter; i++)
+      {
+
+      }
+      // form.AddField("positionsOfTrailX", positions[i].x.ToString());
+      // form.AddField("positionsOfTrailY", positions[i].y.ToString());
+      // form.AddField("positionsOfTrailZ", positions[i].z.ToString());
+    }
+    else
+    {
+      objectType[0] = childInContainer.GetComponent<MeshFilter>().mesh.name.Split(' ')[0];
+    }
+    Debug.Log("uploading type: " + objectType[0]);
     form.AddField("username", DBManager.username);
     form.AddField("id", currentIndex);
     form.AddField("posX", childInContainer.position.x.ToString());
@@ -61,11 +82,14 @@ public class SubmitCreationToDB : MonoBehaviour
     form.AddField("posZ", childInContainer.position.z.ToString());
     form.AddField("latitude", GeoLocation.UserLatitude.ToString());
     form.AddField("longitude", GeoLocation.UserLongitude.ToString());
+    form.AddField("longitude", GeoLocation.UserLongitude.ToString());
+    form.AddField("objectType", objectType[0]);
 
     WWW www = new WWW("http://stevenwyks.com/postCreations.php", form);
-    Debug.Log(www.text);
     // // WWW www = new WWW("http://localhost/sqlconnect/savedata.php", form);
     yield return www;
+    Debug.Log(www.text);
+
     if (www.text == "0")
     {
       Debug.Log("Object info posted.");

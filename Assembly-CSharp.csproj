@@ -516,7 +516,6 @@
      <Compile Include="Assets\Scripts\LoginRegisterScripts\MainMenu.cs" />
      <Compile Include="Assets\Scripts\LoginRegisterScripts\Registration.cs" />
      <Compile Include="Assets\Scripts\PointAtCamera.cs" />
-     <Compile Include="Assets\Scripts\PostCreation\PullDataFromCreations.cs" />
      <Compile Include="Assets\Scripts\PostCreation\PullLongLat.cs" />
      <Compile Include="Assets\Scripts\PostCreation\SubmitCreationToDB.cs" />
      <Compile Include="Assets\Scripts\RaycastManager.cs" />

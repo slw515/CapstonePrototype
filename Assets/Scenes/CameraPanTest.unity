@@ -4638,6 +4638,7 @@ MonoBehaviour:
   drawObject: {fileID: 0}
   cam: {fileID: 963194225}
   spacePenPoint: {fileID: 1885480180}
+  ContainerToAdd: {fileID: 691906589}
   stroke: {fileID: 7722392120260345124, guid: e314d4f3c83174908856e37dab4c4c9c, type: 3}
   colorPicker: {fileID: 1955532516}
 --- !u!1 &984343052
@@ -6333,11 +6334,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1291602937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a10d4687a4e9440b8da21ae638dc714, type: 3}
+  m_Script: {fileID: 11500000, guid: c6fd8b1e963de495f9a59044204d1f1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerDisplay: {fileID: 1823168165}
-  scoreDisplay: {fileID: 299301438}
+  ContainerForCreation: {fileID: 691906589}
+  playerDisplay: {fileID: 0}
 --- !u!114 &1291602943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6347,11 +6348,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1291602937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64a9ab5154a624046a63fd364eb90a76, type: 3}
+  m_Script: {fileID: 11500000, guid: 1917a92dca10b48b396420efce7f4c4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ContainerForCreation: {fileID: 691906589}
-  playerDisplay: {fileID: 1887437652}
 --- !u!1 &1327066642
 GameObject:
   m_ObjectHideFlags: 0
@@ -7137,7 +7136,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1291602943}
+      - m_Target: {fileID: 1291602942}
         m_MethodName: SubmitContainerToDB
         m_Mode: 1
         m_Arguments:

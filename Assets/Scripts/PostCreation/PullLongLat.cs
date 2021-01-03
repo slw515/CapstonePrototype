@@ -18,8 +18,8 @@ public class PullLongLat : MonoBehaviour
   public static IEnumerator PullLongLatFromCreationTable()
   {
     WWWForm form = new WWWForm();
-    float latHardCode = 14.3f;
-    float longHardCode = 121f;
+    float latHardCode = 0;
+    float longHardCode = 0;
 
     Debug.Log("current latitude is: " + GeoLocation.UserLatitude);
 
