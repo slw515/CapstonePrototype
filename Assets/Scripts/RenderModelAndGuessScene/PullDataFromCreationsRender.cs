@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SimpleJSON;
+using UnityEngine.SceneManagement;
 
 public class PullDataFromCreationsRender : MonoBehaviour
 {
@@ -33,6 +34,12 @@ public class PullDataFromCreationsRender : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
+
+  }
+
+  public void returnToMap()
+  {
+    SceneManager.LoadScene("AstronautGame");
 
   }
 }
