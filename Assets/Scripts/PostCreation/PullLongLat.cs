@@ -20,14 +20,14 @@ public class PullLongLat : MonoBehaviour
     WWWForm form = new WWWForm();
     float latHardCode = 0;
     float longHardCode = 0;
-
-    Debug.Log("current latitude is: " + GeoLocation.UserLatitude);
-
-    // form.AddField("latitude", GeoLocation.UserLatitude.ToString());
-    // form.AddField("longitude", GeoLocation.UserLongitude.ToString());
-
+#if UNITY_IPHONE && !UNITY_EDITOR
+    form.AddField("latitude", GeoLocation.UserLatitude.ToString());
+    form.AddField("longitude", GeoLocation.UserLongitude.ToString());
+#endif
+#if UNITY_EDITOR
     form.AddField("latitude", latHardCode.ToString());
     form.AddField("longitude", longHardCode.ToString());
+#endif
     WWW www = new WWW("http://stevenwyks.com/pullLongLatFromDB.php", form);
     yield return www;
     Debug.Log(www.text);

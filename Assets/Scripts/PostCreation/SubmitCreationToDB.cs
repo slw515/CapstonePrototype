@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System;
 public class SubmitCreationToDB : MonoBehaviour
 {
@@ -21,7 +22,11 @@ public class SubmitCreationToDB : MonoBehaviour
 
   public void Update()
   {
-    // Debug.Log("Current number of children of container: " + ContainerForCreation.transform.childCount);
+  }
+
+  public void ReturnToMap()
+  {
+    SceneManager.LoadScene("AstronautGame");
 
   }
 
@@ -59,7 +64,7 @@ public class SubmitCreationToDB : MonoBehaviour
     if (childInContainer.GetComponent<MeshFilter>() == null)
     {
       objectType[0] = "Trail";
-      Vector3[] positions = new Vector3[1000];
+      Vector3[] positions = new Vector3[2000];
       string xString = "";
       string yString = "";
       string zString = "";
@@ -77,6 +82,8 @@ public class SubmitCreationToDB : MonoBehaviour
       form.AddField("trailPositionsX", xString);
       form.AddField("trailPositionsY", yString);
       form.AddField("trailPositionsZ", zString);
+
+
     }
     else
     {
@@ -85,7 +92,10 @@ public class SubmitCreationToDB : MonoBehaviour
       form.AddField("trailPositionsY", "1");
       form.AddField("trailPositionsZ", "1");
     }
-    Debug.Log("uploading type: " + objectType[0]);
+    Debug.Log("uploading color R: " + childInContainer.GetComponent<Renderer>().material.color.r);
+    form.AddField("colorR", childInContainer.GetComponent<Renderer>().material.color.r.ToString());
+    form.AddField("colorG", childInContainer.GetComponent<Renderer>().material.color.g.ToString());
+    form.AddField("colorB", childInContainer.GetComponent<Renderer>().material.color.b.ToString());
     form.AddField("username", DBManager.username);
     form.AddField("id", currentIndex);
     form.AddField("posX", childInContainer.position.x.ToString());

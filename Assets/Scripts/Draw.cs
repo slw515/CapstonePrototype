@@ -98,9 +98,10 @@ public class Draw : MonoBehaviour
   {
     if (editingMode == 4)
     {
+      Debug.Log("trail renderer color is: " + currentStroke.GetComponent<Renderer>().material.color.r);
       if (currentStroke.GetComponent<MeshFilter>() == null)
       {
-        Vector3[] positions = new Vector3[1000];
+        Vector3[] positions = new Vector3[2000];
         string xString = "";
         string yString = "";
         string zString = "";

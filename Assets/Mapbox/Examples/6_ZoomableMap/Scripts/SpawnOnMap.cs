@@ -17,7 +17,7 @@
 
     [SerializeField]
     [Geocode]
-    string[] _locationStrings;
+    List<string> _locationStrings;
     Vector2d[] _locations;
 
     [SerializeField]
@@ -48,7 +48,6 @@
       for (int i = 0; i < parsedData.Count; i++)
       {
         string LatLonString = parsedData[i]["latitude"] + "," + parsedData[i]["longitude"];
-        Debug.Log(LatLonString);
         _locations[i] = Conversions.StringToLatLon(LatLonString);
         var instance = Instantiate(_markerPrefab);
         instance.GetComponent<DisplayModelFromDB>().modelID = parsedData[i]["id"];
