@@ -5,22 +5,27 @@ using UnityEngine;
 public class Paintable : MonoBehaviour
 {
   public GameObject emptyObject;
-  public GameObject Brush;
+  public GameObject Decal;
+  public GameObject toReset;
+  private GameObject toResetLocal;
   public float brushSize = 0.002f;
   int editingMode;
 
   void Start()
   {
-
   }
   void Update()
   {
     editingMode = Camera.main.GetComponent<RaycastManager>().editingMode;
+    Debug.Log("ediitng mode: " + editingMode);
+
     if (editingMode == 5)
     {
+
 #if UNITY_EDITOR
       if (Input.GetMouseButton(0))
       {
+        Debug.Log("painting!");
         var Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(Ray, out hit))
@@ -28,11 +33,13 @@ public class Paintable : MonoBehaviour
           if (hit.transform.gameObject.name != "Plane")
           {
             Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+            Debug.Log("hit an object");
+            GameObject go = Instantiate(Decal, hit.point, rotation);
 
-            var go = Instantiate(Brush, hit.point, rotation);
-
-            go.transform.localScale = Vector3.one * brushSize;
-            go.transform.parent = emptyObject.transform;
+            go.transform.localScale = Vector3.one;
+            toResetLocal = Instantiate(toReset);
+            Destroy(toReset);
+            toReset = toResetLocal;
           }
         }
       }
@@ -48,7 +55,7 @@ public class Paintable : MonoBehaviour
           {
             Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
 
-            var go = Instantiate(Brush, hit.point, rotation);
+            GameObject go = Instantiate(Decal, hit.point, rotation);
 
             go.transform.localScale = Vector3.one * brushSize;
             go.transform.parent = emptyObject.transform;

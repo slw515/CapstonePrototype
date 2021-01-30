@@ -16,16 +16,16 @@ public class MainMenu : MonoBehaviour
   // Start is called before the first frame update
   public void GoToRegister()
   {
-    SceneManager.LoadScene(1);
+    SceneManager.LoadScene("registermenu");
   }
 
   public void GoToLogin()
   {
-    SceneManager.LoadScene(2);
+    SceneManager.LoadScene("loginmenu");
   }
 
   public void GoToGame()
   {
-    SceneManager.LoadScene(3);
+    SceneManager.LoadScene("AstronautGame");
   }
 }

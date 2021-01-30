@@ -29,8 +29,8 @@ public class Login : MonoBehaviour
     {
       DBManager.username = nameField.text;
       DBManager.score = int.Parse(www.text.Split('\t')[1]);
-      UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-
+      DBManager.wordsAvailable = www.text.Split('\t')[2];
+      UnityEngine.SceneManagement.SceneManager.LoadScene("AstronautGame");
     }
     else
     {
@@ -41,5 +41,10 @@ public class Login : MonoBehaviour
   public void VerifyInputs()
   {
     submitButton.interactable = (nameField.text.Length >= 8 && passwordField.text.Length >= 8);
+  }
+
+  public void ReturnToMain()
+  {
+    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
   }
 }

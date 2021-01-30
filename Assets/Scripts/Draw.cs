@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System.Linq;
 using System;
 public class Draw : MonoBehaviour
 {
@@ -51,10 +53,9 @@ public class Draw : MonoBehaviour
 #if UNITY_IPHONE && !UNITY_EDITOR
     //     if (Input.touchCount == 0)
     //       return;
-    if (Input.touchCount > 0 && editingMode == 4)
+    if (Input.touchCount > 0 && editingMode == 4 && Input.touches[0].phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
     {
       StartStroke();
-      // drawObject.SetActive(true);
     }
     else if (Input.touchCount == 0 && editingMode == 4)
     {

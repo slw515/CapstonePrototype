@@ -37,7 +37,7 @@ public class RaycastManager : MonoBehaviour
   private Color currentColor;
   public GameObject colorWheelUIElement;
   public GameObject selectedOverlay;
-
+  public GameObject Decal;
   private bool snapMode = true;
   public GameObject emptyObject;
   private GameObject[] setActiveOverlay;
@@ -56,7 +56,7 @@ public class RaycastManager : MonoBehaviour
   }
 
   public int editingMode = 0;
-
+  public GameObject uiForMobile;
   void Start()
   {
     currentColor = new Color(0, 0, 0);
@@ -64,7 +64,6 @@ public class RaycastManager : MonoBehaviour
     foreach (GameObject overlay in setActiveOverlay)
     {
       overlay.SetActive(false);
-      Debug.Log("name of gameobject in order is: " + overlay.transform.name);
     }
     previewObjects[0] = GameObject.CreatePrimitive(PrimitiveType.Cube);
     previewObjects[1] = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
@@ -81,7 +80,7 @@ public class RaycastManager : MonoBehaviour
       shape.transform.position = new Vector3(-2, -500, -2);
       shape.name = "Transparent";
       shape.GetComponent<MeshRenderer>().material = previewMaterial;
-      shape.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+      shape.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
       shape.layer = LayerMask.NameToLayer("Ignore Raycast");
       shape.SetActive(false);
     }
@@ -89,7 +88,7 @@ public class RaycastManager : MonoBehaviour
     foreach (GameObject shape in opaqueObjects)
     {
       shape.transform.position = new Vector3(-2, -500, -2);
-      shape.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+      shape.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
       shape.name = "PlacedShape";
     }
     placedPrefab.name = "PlacedShape";
@@ -132,16 +131,15 @@ public class RaycastManager : MonoBehaviour
           {
             if (editingMode == 0)
             {
-              Vector3 position = hitInfo.transform.position + Vector3.Scale(hitInfo.normal, new Vector3(0.2f, 0.2f, 0.2f));
+              Vector3 position = hitInfo.transform.position + Vector3.Scale(hitInfo.normal, new Vector3(0.05f, 0.05f, 0.05f));
               Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
               objectHit = hitInfo.transform.gameObject;
               if (objectHit.name == "Plane")
               {
                 var instantiatedObject = Instantiate(placedPrefab, hitInfo.point, objectHit.transform.rotation) as GameObject;
-                instantiatedObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                instantiatedObject.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
                 instantiatedObject.transform.parent = emptyObject.transform;
                 instantiatedObject.GetComponent<MeshRenderer>().material = placedMaterial;
-                Debug.Log("should display type of mesh: " + instantiatedObject.GetComponent<MeshFilter>().mesh.name);
 
                 instantiatedObject.GetComponent<Renderer>().material.color = currentColor;
                 instantiatedObject.AddComponent<DragObject>();
@@ -195,7 +193,7 @@ public class RaycastManager : MonoBehaviour
         {
           if (!IsPointerOverUIObject())
           {
-            Vector3 position = hitInfo.transform.position + Vector3.Scale(hitInfo.normal, new Vector3(0.2f, 0.2f, 0.2f));
+            Vector3 position = hitInfo.transform.position + Vector3.Scale(hitInfo.normal, new Vector3(0.05f, 0.05f, 0.05f));
             Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
             objectHit = hitInfo.transform.gameObject;
             if (objectHit.name != "Transparent")
@@ -205,7 +203,7 @@ public class RaycastManager : MonoBehaviour
                 if (objectHit.name == "Plane")
                 {
                   previewShape.transform.position = hitInfo.point;
-                  previewShape.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                  previewShape.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
                   placementIndicator.transform.position = hitInfo.point;
                   placementIndicator.transform.localRotation = rotation;
                 }
@@ -306,7 +304,7 @@ public class RaycastManager : MonoBehaviour
       if (Input.touchCount == 0) {
         if (Physics.Raycast(theRay, out hitInfo))
         {
-          Vector3 position = hitInfo.transform.position + Vector3.Scale(hitInfo.normal, new Vector3(0.2f, 0.2f, 0.2f));
+          Vector3 position = hitInfo.transform.position + Vector3.Scale(hitInfo.normal, new Vector3(0.05f, 0.05f, 0.05f));
           Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
 
           objectHit = hitInfo.transform.gameObject;
@@ -326,7 +324,7 @@ public class RaycastManager : MonoBehaviour
                 var hitPose = s_Hits[0].pose;
                 placementIndicator.transform.position = hitPose.position;
                 previewShape.transform.position = hitPose.position;
-                previewShape.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                previewShape.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
                 previewShape.transform.localRotation = rotation;
                 placementIndicator.transform.localRotation = Quaternion.identity;
               }
@@ -346,7 +344,7 @@ public class RaycastManager : MonoBehaviour
           {
             if (editingMode == 0)
             {
-              Vector3 position = hitInfo.transform.position + Vector3.Scale(hitInfo.normal, new Vector3(0.2f, 0.2f, 0.2f));
+              Vector3 position = hitInfo.transform.position + Vector3.Scale(hitInfo.normal, new Vector3(0.05f, 0.05f, 0.05f));
               Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
               objectHit = hitInfo.transform.gameObject;
               if (objectHit.name == "PlacedShape(Clone)")
@@ -726,6 +724,26 @@ public class RaycastManager : MonoBehaviour
     // }
 
     // return false;
+  }
+
+  private bool IsPointerOverUIObjectMobile()
+  {
+    // get current pointer position and raycast it
+    PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+    eventDataCurrentPosition.position = new Vector2(Input.touches[0].position.x, Input.touches[0].position.y);
+    List<RaycastResult> results = new List<RaycastResult>();
+    EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+
+    // check if the target is in the UI
+    foreach (RaycastResult r in results)
+    {
+      bool isUIClick = r.gameObject.transform.IsChildOf(uiForMobile.transform);
+      if (isUIClick)
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
 

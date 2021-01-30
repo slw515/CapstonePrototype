@@ -82,8 +82,6 @@ public class SubmitCreationToDB : MonoBehaviour
       form.AddField("trailPositionsX", xString);
       form.AddField("trailPositionsY", yString);
       form.AddField("trailPositionsZ", zString);
-
-
     }
     else
     {
@@ -97,6 +95,7 @@ public class SubmitCreationToDB : MonoBehaviour
     form.AddField("colorG", childInContainer.GetComponent<Renderer>().material.color.g.ToString());
     form.AddField("colorB", childInContainer.GetComponent<Renderer>().material.color.b.ToString());
     form.AddField("username", DBManager.username);
+    form.AddField("word", DataForPostingObject.objectName);
     form.AddField("id", currentIndex);
     form.AddField("posX", childInContainer.position.x.ToString());
     form.AddField("posY", childInContainer.position.y.ToString());

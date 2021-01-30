@@ -5,9 +5,9 @@ using SimpleJSON;
 
 public static class DBManager
 {
-  public static string username = "stevenwyks";
+  public static string username;
   public static int score;
-
+  public static string wordsAvailable;
   public static bool LoggedIn { get { return username != null; } }
 
   public static void LogOut()

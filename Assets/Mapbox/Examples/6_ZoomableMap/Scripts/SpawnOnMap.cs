@@ -21,7 +21,7 @@
     Vector2d[] _locations;
 
     [SerializeField]
-    float _spawnScale = 100f;
+    float _spawnScale = 150f;
 
     [SerializeField]
     GameObject _markerPrefab;
@@ -51,6 +51,9 @@
         _locations[i] = Conversions.StringToLatLon(LatLonString);
         var instance = Instantiate(_markerPrefab);
         instance.GetComponent<DisplayModelFromDB>().modelID = parsedData[i]["id"];
+        instance.GetComponent<DisplayModelFromDB>().latitude = parsedData[i]["latitude"];
+        instance.GetComponent<DisplayModelFromDB>().longitude = parsedData[i]["longitude"];
+
         instance.transform.localPosition = _map.GeoToWorldPosition(_locations[i], true);
         instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
         _spawnedObjects.Add(instance);

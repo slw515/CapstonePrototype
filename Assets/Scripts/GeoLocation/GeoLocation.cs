@@ -13,10 +13,11 @@ public class GeoLocation : MonoBehaviour
     if (Input.location.isEnabledByUser)
     {
       Debug.Log("Input is enabled by user!");
-
       StartCoroutine(GetLocation());
     }
+    InvokeRepeating("GetLocationUpdate", 2.0f, 0.5f);
   }
+
 
   private IEnumerator GetLocation()
   {
@@ -30,11 +31,14 @@ public class GeoLocation : MonoBehaviour
     Debug.Log("In IEnumerator: " + UserLatitude);
     yield break;
   }
+  void GetLocationUpdate()
+  {
+    UserLatitude = Input.location.lastData.latitude;
+    UserLongitude = Input.location.lastData.longitude;
+  }
 
   // Update is called once per frame
   void Update()
   {
-    UserLatitude = Input.location.lastData.latitude;
-    UserLongitude = Input.location.lastData.longitude;
   }
 }

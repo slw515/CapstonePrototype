@@ -3,7 +3,10 @@ guid: 1ec0d7ee024cf409aa9f317fd5827f5f
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - emptyObject: {fileID: 1129170947218726791, guid: cda1b2ce538f54491886d59aa9088f7e,
+      type: 3}
+  - Decal: {fileID: 715765447072742052, guid: 3b0bd7ab055c842f69dd5fcffe2a6fac, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

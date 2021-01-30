@@ -18,7 +18,6 @@ public class PullDataFromCreationsRender : MonoBehaviour
       StartCoroutine(PullObjectsDataFromCreationTable());
     else
       SceneManager.LoadScene("AstronautGame");
-
   }
 
   public IEnumerator PullObjectsDataFromCreationTable()
@@ -71,16 +70,6 @@ public class PullDataFromCreationsRender : MonoBehaviour
     return positions;
   }
 
-  // public Vector3 returnAveragePosition()
-  // {
-
-  // }
-
-  // Update is called once per frame
-  void Update()
-  {
-
-  }
 
   public void returnToMap()
   {

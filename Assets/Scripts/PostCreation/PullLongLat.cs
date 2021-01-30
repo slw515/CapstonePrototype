@@ -23,10 +23,12 @@ public class PullLongLat : MonoBehaviour
 #if UNITY_IPHONE && !UNITY_EDITOR
     form.AddField("latitude", GeoLocation.UserLatitude.ToString());
     form.AddField("longitude", GeoLocation.UserLongitude.ToString());
+    form.AddField("username", DBManager.username);
 #endif
 #if UNITY_EDITOR
     form.AddField("latitude", latHardCode.ToString());
     form.AddField("longitude", longHardCode.ToString());
+    form.AddField("username", DBManager.username);
 #endif
     WWW www = new WWW("http://stevenwyks.com/pullLongLatFromDB.php", form);
     yield return www;
