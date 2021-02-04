@@ -20,6 +20,7 @@ public class PullLongLat : MonoBehaviour
     WWWForm form = new WWWForm();
     float latHardCode = 0;
     float longHardCode = 0;
+    Debug.Log(DBManager.username + ", " + latHardCode + ", " + longHardCode);
 #if UNITY_IPHONE && !UNITY_EDITOR
     form.AddField("latitude", GeoLocation.UserLatitude.ToString());
     form.AddField("longitude", GeoLocation.UserLongitude.ToString());

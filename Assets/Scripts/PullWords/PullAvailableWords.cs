@@ -11,6 +11,7 @@ public class PullAvailableWords : MonoBehaviour
   public GameObject wordOne;
   public GameObject wordTwo;
   public GameObject wordThree;
+  public InputField passwordField;
   private List<string> words;
   // Start is called before the first frame update
   void Start()
@@ -31,7 +32,6 @@ public class PullAvailableWords : MonoBehaviour
     GameObject go = EventSystem.current.currentSelectedGameObject;
     if (go != null)
     {
-
       DataForPostingObject.objectName = go.transform.GetChild(0).GetComponent<Text>().text;
       Debug.Log("data for posting object name: " + DataForPostingObject.objectName);
 #if UNITY_IPHONE && !UNITY_EDITOR

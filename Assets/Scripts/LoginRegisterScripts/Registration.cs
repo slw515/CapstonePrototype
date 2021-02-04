@@ -37,7 +37,6 @@ public class Registration : MonoBehaviour
     form.AddField("name", nameField.text);
     form.AddField("password", passwordField.text);
     form.AddField("words", str);
-    // WWW www = new WWW("http://localhost/sqlconnect/register.php", form);
     WWW www = new WWW("http://stevenwyks.com/registerDeploy.php", form);
 
     yield return www;

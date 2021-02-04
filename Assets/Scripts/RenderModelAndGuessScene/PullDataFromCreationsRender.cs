@@ -4,13 +4,20 @@ using UnityEngine;
 using SimpleJSON;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEngine.UI;
 public class PullDataFromCreationsRender : MonoBehaviour
 {
   // Start is called before the first frame update
   [SerializeField]
   private GameObject trailRenderPrefab;
+  public string word;
   public static JSONNode parsedPositionData;
   public GameObject containerForPrimitives;
+
+  public InputField inputWordGuess;
+  public Sprite wrongLetterSprite;
+  public Sprite correctLetterSprite;
+
   void Start()
   {
     Debug.Log(DataForRender.objectID);
@@ -27,12 +34,31 @@ public class PullDataFromCreationsRender : MonoBehaviour
     form.AddField("id", DataForRender.objectID);
     WWW www = new WWW("http://stevenwyks.com/PullObjectsDataFromCreationTable.php", form);
     yield return www;
-    Debug.Log(www.text);
     parsedPositionData = JSON.Parse(www.text);
-    Debug.Log(parsedPositionData.Count + " length of all objects to render.");
 
     for (int i = 0; i < parsedPositionData.Count; i++)
     {
+      if (i == 0)
+      {
+        word = parsedPositionData[i]["word"];
+        foreach (char c in word)
+        {
+          GameObject EmptyObj = new GameObject(c.ToString());
+          EmptyObj.transform.parent = GameObject.Find("GridGuess").transform;
+          GameObject appendedImage = Instantiate(new GameObject(), new Vector3(0, -80, 0), Quaternion.identity) as GameObject;
+          appendedImage.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+          appendedImage.transform.SetParent(EmptyObj.GetComponent<Transform>());
+          appendedImage.AddComponent<Image>();
+          appendedImage.GetComponent<Image>().sprite = wrongLetterSprite;
+          Text myText = EmptyObj.AddComponent<Text>();
+          myText.text = "_";
+          myText.font = Resources.Load("OpenSans-Regular") as Font;
+          myText.fontSize = 73;
+          myText.alignment = TextAnchor.UpperCenter;
+          myText.color = new Color(0, 0, 0, 1);
+        }
+        DataForRender.creatorUsername = parsedPositionData[i]["username"];
+      }
       GameObject spawn = new GameObject();
       if (parsedPositionData[i]["objectType"] == "Cube")
       {
@@ -70,6 +96,76 @@ public class PullDataFromCreationsRender : MonoBehaviour
     return positions;
   }
 
+  public void onChangeWordGuess()
+  {
+    Debug.Log("clicked check for delete button");
+    bool checkerCount = true;
+    if (inputWordGuess.text.Length == 0)
+      checkerCount = false;
+
+    for (int i = 0; i < inputWordGuess.text.Length; i++)
+    {
+      if (inputWordGuess.text.Length != GameObject.Find("GridGuess").transform.childCount)
+      {
+        checkerCount = false;
+      }
+      if (i < GameObject.Find("GridGuess").transform.childCount)
+      {
+        char c = inputWordGuess.text[i];
+        GameObject.Find("GridGuess").transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+        Text gridText = GameObject.Find("GridGuess").transform.GetChild(i).gameObject.GetComponent<Text>();
+        // Debug.Log(c + " , " + GameObject.Find("GridGuess").transform.GetChild(i).gameObject.name);
+        gridText.text = c.ToString();
+
+        if (c.ToString().ToLower() == GameObject.Find("GridGuess").transform.GetChild(i).gameObject.name.ToLower())
+        {
+          GameObject.Find("GridGuess").transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = correctLetterSprite;
+        }
+        else if (c.ToString().ToLower() != GameObject.Find("GridGuess").transform.GetChild(i).gameObject.name.ToLower())
+        {
+          checkerCount = false;
+          GameObject.Find("GridGuess").transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = wrongLetterSprite;
+        }
+
+      }
+    }
+    for (int i = inputWordGuess.text.Length; i < GameObject.Find("GridGuess").transform.childCount; i++)
+    {
+      Text gridText = GameObject.Find("GridGuess").transform.GetChild(i).gameObject.GetComponent<Text>();
+
+      if (i > inputWordGuess.text.Length)
+      {
+        GameObject.Find("GridGuess").transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = null;
+        gridText.text = "_";
+        GameObject.Find("GridGuess").transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 0);
+      }
+      if (i == 0)
+      {
+        GameObject.Find("GridGuess").transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = null;
+        gridText.text = "_";
+        GameObject.Find("GridGuess").transform.GetChild(i).gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 0);
+      }
+
+    }
+    if (checkerCount == true)
+    {
+      StartCoroutine(SuccessfullyGuessed());
+      Debug.Log("input true!");
+    }
+  }
+
+  IEnumerator SuccessfullyGuessed()
+  {
+    WWWForm form = new WWWForm();
+    Debug.Log(DBManager.username + ", " + DataForRender.creatorUsername + ", " + DataForRender.objectID);
+    form.AddField("user", DBManager.username);
+    form.AddField("creatorOfObject", DataForRender.creatorUsername);
+    form.AddField("objectID", DataForRender.objectID);
+
+    WWW www = new WWW("http://stevenwyks.com/successfulGuessesTable.php", form);
+    yield return www;
+    Debug.Log(www.text);
+  }
 
   public void returnToMap()
   {

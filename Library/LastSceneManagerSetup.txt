@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/LoginRegisterScenes/loginmenu.unity
+- path: Assets/Scenes/RenderAndGuessModel.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
