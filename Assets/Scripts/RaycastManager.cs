@@ -36,6 +36,7 @@ public class RaycastManager : MonoBehaviour
   GameObject ForwardArrow;
   private Color currentColor;
   public GameObject colorWheelUIElement;
+  public GameObject brushPanelUIElement;
   public GameObject selectedOverlay;
   public GameObject Decal;
   private bool snapMode = true;
@@ -750,6 +751,11 @@ public class RaycastManager : MonoBehaviour
   public void toggleColorWheel()
   {
     colorWheelUIElement.SetActive(!colorWheelUIElement.activeSelf);
+  }
+
+  public void toggleBrushPanel()
+  {
+    brushPanelUIElement.SetActive(!brushPanelUIElement.activeSelf);
   }
 
   public void toggleSnap()

@@ -540,6 +540,7 @@
      <Compile Include="Assets\MapboxAR\Unity\Ar\SnapAlignmentStrategy.cs" />
      <Compile Include="Assets\MapboxAR\Unity\Ar\Utilities\PlotRoute.cs" />
      <Compile Include="Assets\Paintable.cs" />
+     <Compile Include="Assets\Scripts\ChangeStroke.cs" />
      <Compile Include="Assets\Scripts\DragObject.cs" />
      <Compile Include="Assets\Scripts\Draw.cs" />
      <Compile Include="Assets\Scripts\FlyCamera.cs" />

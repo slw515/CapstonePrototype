@@ -10,6 +10,7 @@ public class SubmitCreationToDB : MonoBehaviour
   private GameObject ContainerForCreation;
   int currIndex;
   public Text playerDisplay;
+  public Text playerScore;
 
   public void Awake()
   {
@@ -18,6 +19,8 @@ public class SubmitCreationToDB : MonoBehaviour
       UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
     playerDisplay.text = "Current Player: " + DBManager.username;
+    playerScore.text = DBManager.score.ToString();
+
   }
 
   public void Update()
@@ -60,6 +63,7 @@ public class SubmitCreationToDB : MonoBehaviour
     //   throw new System.ArgumentNullException(nameof(childInContainer.name));
     string[] objectType = new string[1];
     WWWForm form = new WWWForm();
+    WWWForm sliceWordsForm = new WWWForm();
 
     if (childInContainer.GetComponent<MeshFilter>() == null)
     {
@@ -96,6 +100,9 @@ public class SubmitCreationToDB : MonoBehaviour
     form.AddField("colorB", childInContainer.GetComponent<Renderer>().material.color.b.ToString());
     form.AddField("username", DBManager.username);
     form.AddField("word", DataForPostingObject.objectName);
+    sliceWordsForm.AddField("wordToRemove", DataForPostingObject.objectName);
+    sliceWordsForm.AddField("username", DBManager.username);
+
     form.AddField("id", currentIndex);
     form.AddField("posX", childInContainer.position.x.ToString());
     form.AddField("posY", childInContainer.position.y.ToString());
@@ -106,10 +113,16 @@ public class SubmitCreationToDB : MonoBehaviour
     form.AddField("objectType", objectType[0]);
 
     WWW www = new WWW("http://stevenwyks.com/postCreations.php", form);
+
+
+
     // // WWW www = new WWW("http://localhost/sqlconnect/savedata.php", form);
     yield return www;
     Debug.Log(www.text);
 
+    WWW sliceFormRequest = new WWW("http://stevenwyks.com/sliceWords.php", sliceWordsForm);
+
+    yield return sliceFormRequest;
     if (www.text == "0")
     {
       Debug.Log("Object info posted.");
