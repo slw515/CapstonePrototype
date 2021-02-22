@@ -35,6 +35,7 @@ public class PullLongLat : MonoBehaviour
     yield return www;
     Debug.Log(www.text);
     parsedData = JSON.Parse(www.text);
+    yield return parsedData;
     Debug.Log("data in IEnumerator call: " + parsedData);
   }
 }

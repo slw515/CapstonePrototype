@@ -17,9 +17,28 @@ public class PullAvailableWords : MonoBehaviour
   void Start()
   {
     words = DBManager.wordsAvailable.Split(',').ToList<string>();
-    wordOne.GetComponent<Text>().text = words[0];
-    wordTwo.GetComponent<Text>().text = words[1];
-    wordThree.GetComponent<Text>().text = words[2];
+    Debug.Log("words.count = " + words.Count);
+    // Debug.Log("worfs two is: " + words[2]);
+    if (words.Count == 3)
+    {  //this is way you can check wheater 
+       //do something   //index count equals to array count
+      wordOne.GetComponent<Text>().text = words[0];
+      wordTwo.GetComponent<Text>().text = words[1];
+      wordThree.GetComponent<Text>().text = words[2];
+    }
+    else if (words.Count == 2)
+    {
+      wordThree.transform.parent.gameObject.SetActive(false);
+      wordOne.GetComponent<Text>().text = words[0];
+      wordTwo.GetComponent<Text>().text = words[1];
+    }
+    else
+    {
+      wordThree.transform.parent.gameObject.SetActive(false);
+      wordTwo.transform.parent.gameObject.SetActive(false);
+      wordOne.GetComponent<Text>().text = words[0];
+    }
+
   }
 
   // Update is called once per frame

@@ -39,8 +39,8 @@
     {
       yield return new WaitForSeconds(1f);
 
-      StartCoroutine(PullLongLat.PullLongLatFromCreationTable());
-      yield return new WaitForSeconds(1.1f);
+      yield return StartCoroutine(PullLongLat.PullLongLatFromCreationTable());
+      // yield return new WaitForSeconds(1.1f);
       parsedData = PullLongLat.parsedData;
       Debug.Log("parsed data is: " + parsedData);
       _locations = new Vector2d[parsedData.Count];

@@ -17,6 +17,11 @@ public class PullDataFromCreationsRender : MonoBehaviour
   public InputField inputWordGuess;
   public Sprite wrongLetterSprite;
   public Sprite correctLetterSprite;
+  Camera mainCam;
+  public List<float> YPositions;
+  public GameObject planeForRender;
+  private float anchorX;
+  private float anchorZ;
 
   void Start()
   {
@@ -25,6 +30,7 @@ public class PullDataFromCreationsRender : MonoBehaviour
       StartCoroutine(PullObjectsDataFromCreationTable());
     else
       SceneManager.LoadScene("AstronautGame");
+    mainCam = Camera.main; // Grab a reference to the camera
   }
 
   public IEnumerator PullObjectsDataFromCreationTable()
@@ -62,11 +68,16 @@ public class PullDataFromCreationsRender : MonoBehaviour
       GameObject spawn = new GameObject();
       if (parsedPositionData[i]["objectType"] == "Cube")
       {
+        anchorX = parsedPositionData[i]["posX"];
+        anchorZ = parsedPositionData[i]["posZ"];
+
         spawn = GameObject.CreatePrimitive(PrimitiveType.Cube);
         spawn.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
       }
       else if (parsedPositionData[i]["objectType"] == "Sphere")
       {
+        anchorX = parsedPositionData[i]["posX"];
+        anchorZ = parsedPositionData[i]["posZ"];
         spawn = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         spawn.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
       }
@@ -77,21 +88,37 @@ public class PullDataFromCreationsRender : MonoBehaviour
         spawn.GetComponent<TrailRenderer>().AddPositions(TextToArray(parsedPositionData[i]["trailPositionsX"], parsedPositionData[i]["trailPositionsY"], parsedPositionData[i]["trailPositionsZ"]).ToArray());
       }
       spawn.transform.parent = containerForPrimitives.transform;
+      YPositions.Add(parsedPositionData[i]["posY"]);
       spawn.GetComponent<Renderer>().material.color = new Color(parsedPositionData[i]["colorR"], parsedPositionData[i]["colorG"], parsedPositionData[i]["colorB"]);
       spawn.transform.position = new Vector3(parsedPositionData[i]["posX"], parsedPositionData[i]["posY"], parsedPositionData[i]["posZ"]);
     }
+    mainCam.transform.position = new Vector3(anchorX, returnMaxYValue(YPositions) + 0.7f, anchorZ - 0.9f);
+    planeForRender.transform.position = new Vector3(0, returnMinYValue(YPositions) - 0.1f, 0);
   }
 
-  public static List<Vector3> TextToArray(string TextX, string TextY, string TextZ)
+  public float returnMinYValue(List<float> YPosList)
+  {
+    return YPosList.Min();
+  }
+
+  public float returnMaxYValue(List<float> YPosList)
+  {
+    return YPosList.Max();
+  }
+
+  public List<Vector3> TextToArray(string TextX, string TextY, string TextZ)
   {
     List<Vector3> positions = new List<Vector3>();
     float[] XPositions = TextX.Split(',').Select(float.Parse).ToArray();
-    float[] YPositions = TextY.Split(',').Select(float.Parse).ToArray();
+    // YPositions.AddRange(TextY.Split(',').Select(float.Parse).ToArray());
+    // YPositions.AddRange(TextY.Split(',').Select(float.Parse).ToArray());
+    float[] YPosList = TextY.Split(',').Select(float.Parse).ToArray();
+
     float[] ZPositions = TextZ.Split(',').Select(float.Parse).ToArray();
 
     for (int i = 0; i < XPositions.Length - 1; i++)
     {
-      positions.Add(new Vector3(XPositions[i], YPositions[i], ZPositions[i]));
+      positions.Add(new Vector3(XPositions[i], YPosList[i], ZPositions[i]));
     }
     return positions;
   }

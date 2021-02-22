@@ -27,17 +27,20 @@ public class SubmitCreationToDB : MonoBehaviour
   {
   }
 
+  IEnumerator callMapDataAgain()
+  {
+    yield return StartCoroutine(PullLongLat.PullLongLatFromCreationTable());
+    ReturnToMap();
+  }
+
   public void ReturnToMap()
   {
     SceneManager.LoadScene("AstronautGame");
-
   }
 
   public void SubmitContainerToDB()
   {
-
     StartCoroutine(PullDataFromCreationTable());
-
   }
   IEnumerator PullDataFromCreationTable()
   {
@@ -132,5 +135,4 @@ public class SubmitCreationToDB : MonoBehaviour
       Debug.Log("Save failed. Error #:" + www.text);
     }
   }
-
 }

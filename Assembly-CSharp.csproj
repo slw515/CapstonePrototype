@@ -564,6 +564,7 @@
      <Compile Include="Assets\Scripts\RenderModelAndGuessScene\PullDataFromCreationsRender.cs" />
      <Compile Include="Assets\Scripts\Stroke.cs" />
      <Compile Include="Assets\Scripts\TargetManager.cs" />
+     <Compile Include="Assets\Scripts\ToggleBrushesStore\ToggleBrushesStore.cs" />
      <Compile Include="Assets\ScrollAndPinch.cs" />
      <Compile Include="Assets\TurnTheGameOn\Arrow WayPointer\DemoContent\CharacterController\Scripts\CharacterControllerThirdPerson.cs" />
      <Compile Include="Assets\TurnTheGameOn\Arrow WayPointer\DemoContent\CharacterController\Scripts\SmoothFollow.cs" />
