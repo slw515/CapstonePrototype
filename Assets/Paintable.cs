@@ -17,7 +17,6 @@ public class Paintable : MonoBehaviour
   void Update()
   {
     editingMode = Camera.main.GetComponent<RaycastManager>().editingMode;
-    Debug.Log("ediitng mode: " + editingMode);
 
     if (editingMode == 5)
     {

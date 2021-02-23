@@ -72,14 +72,14 @@ public class PullDataFromCreationsRender : MonoBehaviour
         anchorZ = parsedPositionData[i]["posZ"];
 
         spawn = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        spawn.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+        spawn.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
       }
       else if (parsedPositionData[i]["objectType"] == "Sphere")
       {
         anchorX = parsedPositionData[i]["posX"];
         anchorZ = parsedPositionData[i]["posZ"];
         spawn = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        spawn.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+        spawn.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
       }
       else if (parsedPositionData[i]["objectType"] == "Trail")
       {

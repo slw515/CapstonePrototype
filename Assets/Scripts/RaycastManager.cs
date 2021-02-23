@@ -137,7 +137,8 @@ public class RaycastManager : MonoBehaviour
               objectHit = hitInfo.transform.gameObject;
               if (objectHit.name == "Plane")
               {
-                var instantiatedObject = Instantiate(placedPrefab, hitInfo.point, objectHit.transform.rotation) as GameObject;
+                Vector3 planeHitPos = new Vector3(round05(hitInfo.point.x), round05(hitInfo.point.y), round05(hitInfo.point.z));
+                var instantiatedObject = Instantiate(placedPrefab, planeHitPos, objectHit.transform.rotation) as GameObject;
                 instantiatedObject.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
                 instantiatedObject.transform.parent = emptyObject.transform;
                 instantiatedObject.GetComponent<MeshRenderer>().material = placedMaterial;
@@ -195,6 +196,8 @@ public class RaycastManager : MonoBehaviour
           if (!IsPointerOverUIObject())
           {
             Vector3 position = hitInfo.transform.position + Vector3.Scale(hitInfo.normal, new Vector3(0.05f, 0.05f, 0.05f));
+            // position = new Vector3(Mathf.Round(position.x), Mathf.Round(position.y), Mathf.Round(position.z));
+
             Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
             objectHit = hitInfo.transform.gameObject;
             if (objectHit.name != "Transparent")
@@ -203,7 +206,9 @@ public class RaycastManager : MonoBehaviour
               {
                 if (objectHit.name == "Plane")
                 {
-                  previewShape.transform.position = hitInfo.point;
+                  Vector3 planeHitPos = new Vector3(round05(hitInfo.point.x), round05(hitInfo.point.y), round05(hitInfo.point.z));
+
+                  previewShape.transform.position = planeHitPos;
                   previewShape.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
                   placementIndicator.transform.position = hitInfo.point;
                   placementIndicator.transform.localRotation = rotation;
@@ -323,8 +328,9 @@ public class RaycastManager : MonoBehaviour
               else if (arRaycastManager.Raycast(Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), s_Hits, TrackableType.Planes))
               {
                 var hitPose = s_Hits[0].pose;
-                placementIndicator.transform.position = hitPose.position;
-                previewShape.transform.position = hitPose.position;
+                Vector3 planeHitPos = new Vector3(round05(hitPose.position.x), round05(hitPose.position.y), round05(hitPose.position.z));
+                placementIndicator.transform.position = planeHitPos;
+                previewShape.transform.position = planeHitPos;
                 previewShape.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
                 previewShape.transform.localRotation = rotation;
                 placementIndicator.transform.localRotation = Quaternion.identity;
@@ -372,12 +378,12 @@ public class RaycastManager : MonoBehaviour
               else if (arRaycastManager.Raycast(Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), s_Hits, TrackableType.Planes))
               {
                 var hitPose = s_Hits[0].pose;
-                var instantiatedObject = Instantiate(placedPrefab, hitPose.position, Quaternion.identity) as GameObject;
+                Vector3 planeHitPos = new Vector3(round05(hitPose.position.x), round05(hitPose.position.y), round05(hitPose.position.z));
+                var instantiatedObject = Instantiate(placedPrefab, planeHitPos, Quaternion.identity) as GameObject;
                 instantiatedObject.transform.parent = emptyObject.transform;
                 instantiatedObject.GetComponent<MeshRenderer>().material = placedMaterial;
                 instantiatedObject.GetComponent<Renderer>().material.color = currentColor;
                 instantiatedObject.AddComponent<DragObject>();
-
               }
             }
             else if (editingMode == 6)
@@ -535,6 +541,11 @@ public class RaycastManager : MonoBehaviour
       previewShape.GetComponent<Renderer>().enabled = false;
 
     }
+  }
+
+  public static float round05(float num)
+  {
+    return Mathf.Round(num * 20f) / 20.0f;
   }
 
   public void changeState(int value)
