@@ -27,6 +27,8 @@ public class Login : MonoBehaviour
     yield return www;
     if (www.text[0] == '0')
     {
+      DBManager.wordsOnSameDay = int.Parse(www.text.Split('\t')[3]);
+
       DBManager.username = nameField.text;
       DBManager.score = int.Parse(www.text.Split('\t')[1]);
       DBManager.wordsAvailable = www.text.Split('\t')[2];

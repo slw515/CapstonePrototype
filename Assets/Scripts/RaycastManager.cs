@@ -19,7 +19,7 @@ public class RaycastManager : MonoBehaviour
   private GameObject previewShape;
 
   [SerializeField]
-  private GameObject placementIndicator;
+  // private GameObject placementIndicator;
   private ARRaycastManager arRaycastManager;
   private GameObject reticle;
   [SerializeField]
@@ -98,7 +98,7 @@ public class RaycastManager : MonoBehaviour
     placedPrefab = opaqueObjects[0];
     // #if UNITY_IPHONE
     arRaycastManager = GetComponent<ARRaycastManager>();
-    placementIndicator = placementIndicator.transform.GetChild(0).gameObject;
+    // placementIndicator = placementIndicator.transform.GetChild(0).gameObject;
     reticle = GameObject.Find("ReticleDraw");
     setActiveOverlay[5].SetActive(true);
     selectedOverlay = setActiveOverlay[5];
@@ -210,24 +210,24 @@ public class RaycastManager : MonoBehaviour
 
                   previewShape.transform.position = planeHitPos;
                   previewShape.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-                  placementIndicator.transform.position = hitInfo.point;
-                  placementIndicator.transform.localRotation = rotation;
+                  // placementIndicator.transform.position = hitInfo.point;
+                  // placementIndicator.transform.localRotation = rotation;
                 }
                 else
                 {
                   previewShape.transform.position = position;
                   previewShape.transform.localRotation = rotation;
                   previewShape.transform.localScale = objectHit.transform.localScale;
-                  placementIndicator.transform.position = position;
-                  placementIndicator.transform.localRotation = rotation;
+                  // placementIndicator.transform.position = position;
+                  // placementIndicator.transform.localRotation = rotation;
 
                 }
               }
               else
               {
                 previewShape.transform.position = hitInfo.point;
-                placementIndicator.transform.position = hitInfo.point;
-                placementIndicator.transform.localRotation = rotation;
+                // placementIndicator.transform.position = hitInfo.point;
+                // placementIndicator.transform.localRotation = rotation;
               }
             }
           }
@@ -329,11 +329,11 @@ public class RaycastManager : MonoBehaviour
               {
                 var hitPose = s_Hits[0].pose;
                 Vector3 planeHitPos = new Vector3(round05(hitPose.position.x), round05(hitPose.position.y), round05(hitPose.position.z));
-                placementIndicator.transform.position = planeHitPos;
+                // placementIndicator.transform.position = planeHitPos;
                 previewShape.transform.position = planeHitPos;
                 previewShape.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
                 previewShape.transform.localRotation = rotation;
-                placementIndicator.transform.localRotation = Quaternion.identity;
+                // placementIndicator.transform.localRotation = Quaternion.identity;
               }
             }
             else
