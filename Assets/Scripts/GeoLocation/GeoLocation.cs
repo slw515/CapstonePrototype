@@ -50,8 +50,8 @@ using UnityEngine;
 public class GeoLocation : MonoBehaviour
 {
   // Start is called before the first frame update
-  public static float UserLongitude = 10;
-  public static float UserLatitude = 10;
+  public static float UserLongitude = 100;
+  public static float UserLatitude = 100;
   // Start is called before the first frame update
   void Start()
   {

@@ -8,6 +8,9 @@ public class SubmitCreationToDB : MonoBehaviour
 {
   [SerializeField]
   private GameObject ContainerForCreation;
+
+  public GameObject loadingPanel;
+
   int currIndex;
   public Text playerDisplay;
   public Text playerScore;
@@ -51,11 +54,22 @@ public class SubmitCreationToDB : MonoBehaviour
     yield return www;
     currIndex = int.Parse(www.text.Split('\t')[1]);
     yield return currIndex;
-
-    foreach (Transform child in ContainerForCreation.transform)
+    int numObjects = 0;
+    // foreach (Transform child in ContainerForCreation.transform)
+    // {
+    //   StartCoroutine(SubmitIENumerator(child, currIndex));
+    //   numObjects++;
+    // }
+    while (numObjects < ContainerForCreation.transform.childCount)
     {
-      StartCoroutine(SubmitIENumerator(child, currIndex));
+      StartCoroutine(SubmitIENumerator(ContainerForCreation.transform.GetChild(numObjects), currIndex));
+      numObjects++;
+      yield return new WaitForSeconds(0.3f);
+      loadingPanel.SetActive(true);
     }
+    Debug.Log("NUM OBJECTS = " + numObjects);
+    loadingPanel.SetActive(false);
+    SceneManager.LoadScene("AstronautGame");
   }
 
 
@@ -71,7 +85,7 @@ public class SubmitCreationToDB : MonoBehaviour
     if (childInContainer.GetComponent<MeshFilter>() == null)
     {
       objectType[0] = "Trail";
-      Vector3[] positions = new Vector3[2000];
+      Vector3[] positions = new Vector3[25000];
       string xString = "";
       string yString = "";
       string zString = "";
@@ -129,6 +143,7 @@ public class SubmitCreationToDB : MonoBehaviour
     if (www.text == "0")
     {
       Debug.Log("Object info posted.");
+      // ReturnToMap();
     }
     else
     {

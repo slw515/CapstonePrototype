@@ -41,7 +41,7 @@ public class PullDataFromCreationsRender : MonoBehaviour
     WWW www = new WWW("http://stevenwyks.com/PullObjectsDataFromCreationTable.php", form);
     yield return www;
     parsedPositionData = JSON.Parse(www.text);
-
+    Debug.Log("number of objects in this is: " + parsedPositionData.Count);
     for (int i = 0; i < parsedPositionData.Count; i++)
     {
       if (i == 0)
@@ -92,6 +92,7 @@ public class PullDataFromCreationsRender : MonoBehaviour
       spawn.GetComponent<Renderer>().material.color = new Color(parsedPositionData[i]["colorR"], parsedPositionData[i]["colorG"], parsedPositionData[i]["colorB"]);
       spawn.transform.position = new Vector3(parsedPositionData[i]["posX"], parsedPositionData[i]["posY"], parsedPositionData[i]["posZ"]);
     }
+    Debug.Log("number of children: " + containerForPrimitives.transform.childCount);
     mainCam.transform.position = new Vector3(anchorX, returnMaxYValue(YPositions) + 0.7f, anchorZ - 0.9f);
     planeForRender.transform.position = new Vector3(0, returnMinYValue(YPositions) - 0.1f, 0);
   }

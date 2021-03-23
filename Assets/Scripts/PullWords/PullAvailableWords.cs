@@ -28,7 +28,6 @@ public class PullAvailableWords : MonoBehaviour
       wordThree.transform.parent.gameObject.SetActive(false);
       noWords.SetActive(true);
       wordsOfTheDay.SetActive(false);
-      Debug.Log("three mf words!");
     }
     else if (DBManager.wordsOnSameDay == 2)
     {
