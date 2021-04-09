@@ -566,13 +566,13 @@
      <Compile Include="Assets\Scripts\Stroke.cs" />
      <Compile Include="Assets\Scripts\TargetManager.cs" />
      <Compile Include="Assets\Scripts\ToggleBrushesStore\ToggleBrushesStore.cs" />
+     <Compile Include="Assets\Scripts\TutorialControl.cs" />
      <Compile Include="Assets\ScrollAndPinch.cs" />
      <Compile Include="Assets\TurnTheGameOn\Arrow WayPointer\DemoContent\CharacterController\Scripts\CharacterControllerThirdPerson.cs" />
      <Compile Include="Assets\TurnTheGameOn\Arrow WayPointer\DemoContent\CharacterController\Scripts\SmoothFollow.cs" />
      <Compile Include="Assets\TurnTheGameOn\Arrow WayPointer\DemoContent\CharacterController\Scripts\UserControlThirdPerson.cs" />
      <Compile Include="Assets\TurnTheGameOn\Arrow WayPointer\Scripts\Waypoint.cs" />
      <Compile Include="Assets\TurnTheGameOn\Arrow WayPointer\Scripts\WaypointController.cs" />
-     <Compile Include="Assets\TutorialControl.cs" />
      <Compile Include="Assets\UnityARInterface\ARRemote\Scripts\ARRemoteDevice.cs" />
      <Compile Include="Assets\UnityARInterface\ARRemote\Scripts\ARRemoteEditor.cs" />
      <Compile Include="Assets\UnityARInterface\ARRemote\Scripts\ARRemoteEditorInterface.cs" />

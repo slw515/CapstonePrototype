@@ -18,17 +18,23 @@ public class Registration : MonoBehaviour
     StartCoroutine(Register());
 
   }
+  string[] words = { "Bottle", "Sandwich", "Computer", "Mountain", "Mug", "Tree" };
 
   IEnumerator Register()
   {
-    string path = Application.dataPath + "/Scripts/LoginRegisterScripts/WordDB.json";
-    string jsonString = File.ReadAllText(path);
-    JSONObject playerJson = (JSONObject)JSON.Parse(jsonString);
-    string text = playerJson["words"].ToString().Substring(1, playerJson["words"].ToString().Length - 2);
-    text = text.Replace("\"", "");
-    string[] words = text.Split(',');
+    // #if UNITY_EDITOR
+    //     string path = Application.dataPath + "/Scripts/LoginRegisterScripts/WordDB.json";
+    // #endif
+    // #if UNITY_IPHONE && !UNITY_EDITOR
+    //     string path = Application.streamingAssetsPath + "WordDB.json";
+    // #endif
+    //     string jsonString = File.ReadAllText(path);
+    //     JSONObject playerJson = (JSONObject)JSON.Parse(jsonString);
+    //     string text = playerJson["words"].ToString().Substring(1, playerJson["words"].ToString().Length - 2);
+    //     text = text.Replace("\"", "");
+    //     string[] words = text.Split(',');
     string[] shuffledWords = reshuffle(words);
-    Debug.Log(shuffledWords[0] + ", " + shuffledWords[1]);
+    // Debug.Log("Okay shuffling: " + shuffledWords[0] + ", " + shuffledWords[1]);
     for (var i = 0; i < shuffledWords.Length; i++)
     {
       str += shuffledWords[i].ToString() + ",";

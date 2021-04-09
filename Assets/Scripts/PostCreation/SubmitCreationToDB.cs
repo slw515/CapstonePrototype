@@ -69,7 +69,6 @@ public class SubmitCreationToDB : MonoBehaviour
     }
     Debug.Log("NUM OBJECTS = " + numObjects);
     loadingPanel.SetActive(false);
-    SceneManager.LoadScene("AstronautGame");
   }
 
 
@@ -81,6 +80,7 @@ public class SubmitCreationToDB : MonoBehaviour
     string[] objectType = new string[1];
     WWWForm form = new WWWForm();
     WWWForm sliceWordsForm = new WWWForm();
+    WWWForm returnWords = new WWWForm();
 
     if (childInContainer.GetComponent<MeshFilter>() == null)
     {
@@ -119,7 +119,7 @@ public class SubmitCreationToDB : MonoBehaviour
     form.AddField("word", DataForPostingObject.objectName);
     sliceWordsForm.AddField("wordToRemove", DataForPostingObject.objectName);
     sliceWordsForm.AddField("username", DBManager.username);
-
+    returnWords.AddField("username", DBManager.username);
     form.AddField("id", currentIndex);
     form.AddField("posX", childInContainer.position.x.ToString());
     form.AddField("posY", childInContainer.position.y.ToString());
@@ -132,7 +132,6 @@ public class SubmitCreationToDB : MonoBehaviour
     WWW www = new WWW("http://stevenwyks.com/postCreations.php", form);
 
 
-
     // // WWW www = new WWW("http://localhost/sqlconnect/savedata.php", form);
     yield return www;
     Debug.Log(www.text);
@@ -140,14 +139,21 @@ public class SubmitCreationToDB : MonoBehaviour
     WWW sliceFormRequest = new WWW("http://stevenwyks.com/sliceWords.php", sliceWordsForm);
 
     yield return sliceFormRequest;
-    if (www.text == "0")
-    {
-      Debug.Log("Object info posted.");
-      // ReturnToMap();
-    }
-    else
-    {
-      Debug.Log("Save failed. Error #:" + www.text);
-    }
+    // if (www.text == "0")
+    // {
+
+    // }
+    // else
+    // {
+    Debug.Log("Save failed. Error #:" + www.text);
+    Debug.Log("Object info posted.");
+    // ReturnToMap();
+    WWW newWords = new WWW("http://stevenwyks.com/modifiedLoginForReturningWords.php", returnWords);
+    yield return newWords;
+    Debug.Log(newWords.text.Split('\t')[1] + " " + newWords.size + "   NEW WORDS!");
+    DBManager.wordsAvailable = newWords.text.Split('\t')[1];
+    DBManager.wordsOnSameDay++;
+    SceneManager.LoadScene("AstronautGame");
+    // }
   }
 }

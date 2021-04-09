@@ -179,6 +179,7 @@ public class PullDataFromCreationsRender : MonoBehaviour
     {
       StartCoroutine(SuccessfullyGuessed());
       Debug.Log("input true!");
+      returnToMap();
     }
   }
 
